@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kangan Fancy Store | Luxury Interactive 3D Catalogue</title>
+    <meta name="google-site-verification" content="ea9QAiPNOkn07UD09ZzNzGgT8V_VC1tTxzu380ThSFU" />
+    <meta name="description"
+        content="Nepal's premier luxury jewelry destination. Handcrafted bangles, necklaces, and rings with real-time stock matrix.">
+
+    <!-- Third Party Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@200;400;600;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #ff0080;
+            --secondary: #7928ca;
+            --accent: #00dfd8;
+            --gold: #d4af37;
+            --dark: #020202;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+            --neon-glow: 0 0 25px rgba(255, 0, 128, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1,
+        h2,
+        h3,
+        .brand {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* --- PRELOADER --- */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .pl-logo {
+            font-size: 2.5rem;
+            letter-spacing: 10px;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        .pl-bar-wrap {
+            width: 250px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .pl-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: var(--primary);
+        }
+
+        /* --- NAVIGATION --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 20px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(2, 2, 2, 0.75);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 35px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* --- HERO SECTION --- */
+        #hero {
+            height: 85vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 5%;
+            background: radial-gradient(circle at center, #110318 0%, var(--dark) 70%);
+        }
+
+        .hero-text {
+            z-index: 2;
+        }
+
+        .hero-text span {
+            color: var(--gold);
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .hero-text h1 {
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            line-height: 1.1;
+            margin: 20px 0;
+            font-weight: 700;
+        }
+
+        .hero-text p {
+            max-width: 700px;
+            margin: 0 auto 40px;
+            color: #aaa;
+            font-weight: 300;
+        }
+
+        /* --- FILTER MATRIX --- */
+        .controls {
+            padding: 40px 6% 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .search-box {
+            flex: 1;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            padding: 15px 20px 15px 50px;
+            color: #fff;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .cat-tabs {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 10px 22px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+
+        .tab.active {
+            background: #fff;
+            color: #000;
+            font-weight: 600;
+        }
+
+        /* --- LIVE CATALOGUE GRID --- */
+        #shop {
+            padding: 20px 6% 80px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .p-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .p-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: var(--neon-glow);
+        }
+
+        .p-img {
+            height: 320px;
+            background: #050505;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .p-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.85;
+            transition: 0.5s;
+        }
+
+        .p-card:hover .p-img img {
+            transform: scale(1.05);
+            opacity: 1;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border-radius: 20px;
+            text-transform: uppercase;
+        }
+
+        .status-instock {
+            background: rgba(0, 223, 216, 0.2);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+
+        .status-out {
+            background: rgba(255, 0, 128, 0.2);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .p-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .p-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .p-qty {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 15px;
+        }
+
+        .btn-inspect {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-family: 'Cinzel';
+            cursor: pointer;
+            transition: 0.3s;
+            letter-spacing: 1px;
+        }
+
+        .p-card:hover .btn-inspect {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+
+        /* --- ULTRA 3D MODAL VIEWPORT --- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(15px);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-card {
+            background: #080808;
+            width: 100%;
+            max-width: 950px;
+            height: 75vh;
+            border: 1px solid var(--border);
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            position: relative;
+        }
+
+        #canvas3d-container {
+            width: 100%;
+            height: 100%;
+            background: #030303;
+            position: relative;
+            cursor: grab;
+        }
+
+        .modal-right {
+            padding: 45px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-left: 1px solid var(--border);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #fff;
+            z-index: 3100;
+            transition: 0.3s;
+        }
+
+        .close-modal:hover {
+            color: var(--primary);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 60px 6% 30px;
+            background: #010101;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .bottom-bar {
+            color: #505050;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        /* --- MOBILE OPTIMIZATION --- */
+        @media screen and (max-width: 768px) {
+            header {
+                padding: 15px 4%;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .modal-card {
+                grid-template-columns: 1fr;
+                height: 85vh;
+            }
+
+            #canvas3d-container {
+                height: 45%;
+            }
+
+            .modal-right {
+                padding: 25px;
+            }
+
+            .hero-text h1 {
+                font-size: 2.3rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="preloader">
+        <div class="pl-logo">KANGAN LUXE</div>
+        <div class="pl-bar-wrap">
+            <div class="pl-bar-fill"></div>
+        </div>
+    </div>
+
+    <header>
+        <div class="brand logo" style="font-size: 1.3rem; letter-spacing: 3px; color: var(--gold);">Kangan Gallery</div>
+        <nav class="nav-links">
+            <a href="#hero">Showroom</a>
+            <a href="#shop">Interactive Catalogue</a>
+        </nav>
+        <div
+            style="font-size: 0.75rem; letter-spacing: 1px; color: var(--accent); border: 1px solid var(--accent); padding: 4px 10px;">
+            LIVE STOCK TRACKER</div>
+    </header>
+
+    <section id="hero">
+        <div class="hero-text">
+            <span>Siraha, Nepal • Luxury Matrix</span>
+            <h1>Virtual Interactive<br>Showroom</h1>
+            <p>Welcome to an elite visual gallery. Below is the real-time availability and stock metrics of our premium
+                bridal bangles, necklaces, and bespoke gold-plated crafts. Click any item for full 3D interactive
+                structural analysis.</p>
+        </div>
+    </section>
+
+    <div class="controls">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="p-search" placeholder="Filter vault files..." onkeyup="filterProducts()">
+        </div>
+        <div class="cat-tabs" id="tabs-container">
+            <!-- Dynamically Rendered -->
+        </div>
+    </div>
+
+    <section id="shop">
+        <div class="product-grid" id="main-grid"></div>
+    </section>
+
+    <!-- 3D INTERACTIVE VIEWPORT MODAL -->
+    <div class="modal-overlay" id="modal-container">
+        <div class="modal-card">
+            <i class="fas fa-times close-modal" onclick="closeModal()"></i>
+            <div id="canvas3d-container">
+                <div
+                    style="position:absolute; bottom:15px; left:20px; font-size:0.65rem; color:#666; letter-spacing:1px; pointer-events:none;">
+                    <i class="fas fa-sync fa-spin"></i> DRAG TO ROTATE 3D SHAPE</div>
+            </div>
+            <div class="modal-right">
+                <span id="m-cat"
+                    style="color:var(--gold); font-size:0.8rem; letter-spacing:3px; text-transform:uppercase;"></span>
+                <h2 id="m-title" style="margin:10px 0 20px; font-size:1.8rem;"></h2>
+                <div style="height:1px; background:var(--border); margin-bottom:20px;"></div>
+                <p id="m-desc" style="color:#aaa; font-size:0.9rem; margin-bottom:25px; font-weight:300;"></p>
+                <div
+                    style="display:flex; justify-content:space-between; align-items:center; background:var(--glass); padding:15px; border:1px solid var(--border);">
+                    <span style="font-size:0.85rem; color:#888;">Current Vault Balance:</span>
+                    <strong id="m-stock" style="color:#fff;"></strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="bottom-bar">
+            <span>© 2026 Kangan Fancy Store. Designed by Aayush. Internal Operational Database System.</span>
+        </div>
+    </footer>
+
+    <script>
+        // --- 25 HIGH-END VAULT ITEMS WITH REAL QUANTITIES ---
+        const PRODUCTS = [
+            { id: 1, name: "Regal Gold Kangan Set", cat: "Bangles", qty: 14, type: "torus", img: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=600", desc: "Pure high-density gold plating architecture with recursive traditional micro-carvings." },
+            { id: 2, name: "Emerald Royale Choker", cat: "Necklaces", qty: 3, type: "knot", img: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=600", desc: "Deep Himalayan emerald structural embedding matrix featuring algorithmic layout symmetry." },
+            { id: 3, name: "Pearl Droplet Earrings", cat: "Earrings", qty: 0, type: "sphere", img: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=600", desc: "Subsurface scattering organic pearl structures engineered for ambient light bouncing." },
+            { id: 4, name: "Deep Blue Sapphire Ring", cat: "Rings", qty: 8, type: "cylinder", img: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=600", desc: "Octagonal precision cut sapphire element bound securely within reinforced crystalline prongs." },
+            { id: 5, name: "Antique Wedding Bangles", cat: "Bangles", qty: 22, type: "torus", img: "https://images.unsplash.com/photo-1602751584412-718b4e18375a?q=80&w=600", desc: "Aged brass and structural gold core. Historically accurate legacy design mechanics." },
+            { id: 6, name: "Matte Gold Kangan Duo", cat: "Bangles", qty: 5, type: "torus", img: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=600", desc: "Non-reflective absolute fine matte texture array offering sublime contemporary minimalism." },
+            { id: 7, name: "Ruby Studded Jhumkas", cat: "Earrings", qty: 11, type: "sphere", img: "https://images.unsplash.com/photo-1635767793021-95207c1ae584?q=80&w=600", desc: "Cascading micro-rubies linked via flexible ultra-thin molecular structural chains." },
+            { id: 8, name: "Diamond Vow Band", cat: "Rings", qty: 2, type: "cylinder", img: "https://images.unsplash.com/photo-1589128777073-263566ae5e4d?q=80&w=600", desc: "Continuous procedural ring topology studded with multi-faceted synthetic high-index diamond matrices." },
+            { id: 9, name: "Temple Style Bangles", cat: "Bangles", qty: 0, type: "torus", img: "https://images.unsplash.com/photo-1619119069152-a2b331eb392a?q=80&w=600", desc: "Detailed ancient architectural reliefs compressed seamlessly onto custom cylindrical wearable bounds." },
+            { id: 10, name: "Bridal Rani Haar Grid", cat: "Necklaces", qty: 4, type: "knot", img: "https://images.unsplash.com/photo-1511253819057-5408d3d81f88?q=80&w=600", desc: "Full layered chest armor geometry composed of hundreds of intricate interlocking luxury nodes." },
+            { id: 11, name: "Statement Hoop Gold", cat: "Earrings", qty: 19, type: "torus", img: "https://images.unsplash.com/photo-1630030532634-21761d71848e?q=80&w=600", desc: "Perfect hollow-circle structural vectors balancing dynamic inertia with extreme structural gloss." },
+            { id: 12, name: "Classic Solitaire Ring", cat: "Rings", qty: 7, type: "cylinder", img: "https://images.unsplash.com/photo-1544957992-20514f595d6f?q=80&w=600", desc: "Single high-poly diamond vertex assembly hoisted above an unblemished specular metallic ring shank." },
+            { id: 13, name: "Solid Velvet Bangles", cat: "Bangles", qty: 45, type: "torus", img: "https://images.unsplash.com/photo-1611085583191-a3b1a308c1f1?q=80&w=600", desc: "Micro-fiber high absorption surface physics simulation mimicking luxury red velvet fabric shaders." },
+            { id: 14, name: "Lotus Petal Necklace", cat: "Necklaces", qty: 6, type: "knot", img: "https://images.unsplash.com/photo-1596944924616-7b38e7cfac36?q=80&w=600", desc: "Organic structural floral curvatures optimized with golden ratio subdivision algorithms." },
+            { id: 15, name: "Moonlight Silver Studs", cat: "Earrings", qty: 13, type: "sphere", img: "https://images.unsplash.com/photo-1616110410499-1317075c3d00?q=80&w=600", desc: "High-specular sterling silver compound designed for maximizing cool moonlight wavelength reflections." },
+            { id: 16, name: "Vintage Rose Gold Ring", cat: "Rings", qty: 0, type: "cylinder", img: "https://images.unsplash.com/photo-1603961314754-811bd5817279?q=80&w=600", desc: "Custom tinted copper-gold matrix formed into interlocking organic leaf structural meshes." },
+            { id: 17, name: "Gold Plated Bridal Set", cat: "Necklaces", qty: 2, type: "knot", img: "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?q=80&w=600", desc: "Comprehensive wedding pack asset containing necklets, earrings and accent crowns." },
+            { id: 18, name: "Filigree Design Bangle", cat: "Bangles", qty: 30, type: "torus", img: "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=600", desc: "Exquisite empty space network layout showing high craft structural wire framing logic." },
+            { id: 19, name: "Ethereal Pearl Drops", cat: "Earrings", qty: 5, type: "sphere", img: "https://images.unsplash.com/photo-1588444837495-c6cfcb53b82c?q=80&w=600", desc: "Vertical balanced double-axis teardrop configuration utilizing natural premium ocean materials." },
+            { id: 20, name: "Princess Cut Garnet", cat: "Rings", qty: 9, type: "cylinder", img: "https://images.unsplash.com/photo-1598560917505-59a3ad559071?q=80&w=600", desc: "Square-profile pure refraction gemstone matrix sitting flush atop an ergonomic inner-beveled band." },
+            { id: 21, name: "Platinum Minimalist Chain", cat: "Necklaces", qty: 12, type: "knot", img: "https://images.unsplash.com/photo-1512163143273-bde0e3cc7407?q=80&w=600", desc: "Ultra-high strength rare platinum alloy links processed through automated microscopic polish grids." },
+            { id: 22, name: "Empress Tiara Band", cat: "Rings", qty: 1, type: "cylinder", img: "https://images.unsplash.com/photo-1601121141499-17d4924294b0?q=80&w=600", desc: "Crown-shaped geometric vertex extensions encrusted entirely with clear high-fidelity diamond simulations." },
+            { id: 23, name: "Meenakari Enamel Kangan", cat: "Bangles", qty: 16, type: "torus", img: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=600", desc: "Traditional polychrome geometric glaze fused via high temperature surface bake processing mappings." },
+            { id: 24, name: "Chandelier Luxury Cascades", cat: "Earrings", qty: 4, type: "sphere", img: "https://images.unsplash.com/photo-1569397288581-2b0285d82a1e?q=80&w=600", desc: "Multi-tiered dynamic gravitational structural array that catches peripheral light rays perfectly." },
+            { id: 25, name: "Ancestral Heritage Collar", cat: "Necklaces", qty: 0, type: "knot", img: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=600", desc: "Deep ancient historic shape language replicated via non-destructive volumetric sculpt pipelines." }
+        ];
+
+        let currentCat = "All";
+
+        // --- PRELOADER LOGIC ---
+        window.addEventListener('DOMContentLoaded', () => {
+            gsap.to(".pl-bar-fill", {
+                width: "100%", duration: 1.2, onComplete: () => {
+                    gsap.to("#preloader", { opacity: 0, display: "none", duration: 0.5 });
+                    renderTabs();
+                    renderCatalogue();
+                }
+            });
+        });
+
+        // --- RENDER CONTROL TABS ---
+        function renderTabs() {
+            const categories = ["All", "Bangles", "Necklaces", "Rings", "Earrings"];
+            const container = document.getElementById('tabs-container');
+            container.innerHTML = categories.map(cat => `
+                <div class="tab ${cat === currentCat ? 'active' : ''}" onclick="selectCategory('${cat}', this)">${cat}</div>
+            `).join('');
+        }
+
+        function selectCategory(cat, el) {
+            currentCat = cat;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            renderCatalogue();
+        }
+
+        // --- RENDER VISUAL DATABASE ---
+        function renderCatalogue() {
+            const grid = document.getElementById('main-grid');
+            const term = document.getElementById('p-search').value.toLowerCase();
+
+            const filtered = PRODUCTS.filter(p => {
+                const matchesCat = currentCat === "All" || p.cat === currentCat;
+                const matchesSearch = p.name.toLowerCase().includes(term);
+                return matchesCat && matchesSearch;
+            });
+
+            grid.innerHTML = filtered.map(p => {
+                const inStock = p.qty > 0;
+                return `
+                    <div class="p-card">
+                        <div class="p-img">
+                            <img src="${p.img}" alt="${p.name}">
+                            <span class="status-badge ${inStock ? 'status-instock' : 'status-out'}">
+                                ${inStock ? 'Available' : 'Vault Empty'}
+                            </span>
+                        </div>
+                        <div class="p-content">
+                            <div class="p-title">${p.name}</div>
+                            <div class="p-qty">${inStock ? `In Stock Matrix: ${p.qty} units` : 'Out of Stock Architecture'}</div>
+                            <button class="btn-inspect" onclick="open3DViewer(${p.id})">INSPECT SHAPE 3D</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterProducts() { renderCatalogue(); }
+
+        // --- THREE.JS LIVE MODAL ENGINE REAL-TIME MATRIX ---
+        let scene, camera, renderer, activeMesh;
+        const container3d = document.getElementById('canvas3d-container');
+
+        function init3DEngine() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(45, container3d.clientWidth / container3d.clientHeight, 0.1, 100);
+            camera.position.z = 5;
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(container3d.clientWidth, container3d.clientHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container3d.appendChild(renderer.domElement);
+
+            // Lighting Rig
+            const ambient = new THREE.AmbientLight(0xffffff, 0.4);
+            const keyLight = new THREE.DirectionalLight(0xff0080, 2);
+            keyLight.position.set(5, 5, 5);
+            const fillLight = new THREE.DirectionalLight(0x00dfd8, 1.5);
+            fillLight.position.set(-5, -2, 2);
+            scene.add(ambient, keyLight, fillLight);
+
+            // Interactive Drag Mechanics
+            let isDragging = false;
+            let prevX = 0, prevY = 0;
+
+            container3d.addEventListener('mousedown', (e) => { isDragging = true; prevX = e.clientX; prevY = e.clientY; });
+            window.addEventListener('mouseup', () => isDragging = false);
+            container3d.addEventListener('mousemove', (e) => {
+                if (!isDragging || !activeMesh) return;
+                const deltaX = e.clientX - prevX;
+                const deltaY = e.clientY - prevY;
+                activeMesh.rotation.y += deltaX * 0.007;
+                activeMesh.rotation.x += deltaY * 0.007;
+                prevX = e.clientX;
+                prevY = e.clientY;
+            });
+
+            // Touch support for Mobile 3D interaction
+            container3d.addEventListener('touchstart', (e) => { isDragging = true; prevX = e.touches[0].clientX; prevY = e.touches[0].clientY; });
+            window.addEventListener('touchend', () => isDragging = false);
+            container3d.addEventListener('touchmove', (e) => {
+                if (!isDragging || !activeMesh) return;
+                const deltaX = e.touches[0].clientX - prevX;
+                const deltaY = e.touches[0].clientY - prevY;
+                activeMesh.rotation.y += deltaX * 0.009;
+                activeMesh.rotation.x += deltaY * 0.009;
+                prevX = e.touches[0].clientX;
+                prevY = e.touches[0].clientY;
+            });
+
+            function renderLoop() {
+                requestAnimationFrame(renderLoop);
+                if (activeMesh && !isDragging) {
+                    activeMesh.rotation.y += 0.006;
+                }
+                renderer.render(scene, camera);
+            }
+            renderLoop();
+        }
+
+        function open3DViewer(id) {
+            const product = PRODUCTS.find(p => p.id === id);
+            if (!product) return;
+
+            document.getElementById('m-cat').innerText = product.cat;
+            document.getElementById('m-title').innerText = product.name;
+            document.getElementById('m-desc').innerText = product.desc;
+            document.getElementById('m-stock').innerText = product.qty > 0 ? `${product.qty} Units Verified` : "0 Units (Restocking)";
+            document.getElementById('m-stock').style.color = product.qty > 0 ? "var(--accent)" : "var(--primary)";
+
+            if (!renderer) init3DEngine();
+
+            // Clear previous structural mesh
+            if (activeMesh) scene.remove(activeMesh);
+
+            // Procedural High Quality Mesh Synthesis Based on Type
+            let geometry;
+            if (product.type === "torus") {
+                geometry = new THREE.TorusGeometry(1, 0.25, 32, 100);
+            } else if (product.type === "knot") {
+                geometry = new THREE.TorusKnotGeometry(0.7, 0.2, 120, 16);
+            } else if (product.type === "cylinder") {
+                geometry = new THREE.CylinderGeometry(0.8, 0.8, 0.6, 32);
+            } else {
+                geometry = new THREE.SphereGeometry(1, 64, 64);
+            }
+
+            // Absolute Premium Procedural Jewelry Material Shader
+            const material = new THREE.MeshStandardMaterial({
+                color: product.qty > 0 ? 0xd4af37 : 0xff0080,
+                metalness: 0.95,
+                roughness: 0.15,
+                wireframe: product.qty === 0 // Show abstract blueprint if out of stock
+            });
+
+            activeMesh = new THREE.Mesh(geometry, material);
+            scene.add(activeMesh);
+
+            // Reset rotation orientations
+            activeMesh.rotation.set(0.4, 0.2, 0);
+
+            document.getElementById('modal-container').style.display = 'flex';
+
+            // Adjust renderer viewport matrix mapping
+            setTimeout(() => {
+                camera.aspect = container3d.clientWidth / container3d.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container3d.clientWidth, container3d.clientHeight);
+            }, 50);
+        }
+
+        function closeModal() {
+            document.getElementById('modal-container').style.display = 'none';
+        }
+
+        // Handle Responsive Screen Resizing Matrix
+        window.addEventListener('resize', () => {
+            if (renderer && container3d) {
+                camera.aspect = container3d.clientWidth / container3d.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container3d.clientWidth, container3d.clientHeight);
+            }
+        });
+    </script>
+</body>
+
+</html>
