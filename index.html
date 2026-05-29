@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kangan Fancy Store | 3D Crystal Studio</title>
+    <title>Kangan Fancy Store | Premium 3D Morph Showroom</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Three.js -->
+    <!-- Three.js for Object Morphing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- GSAP for Smooth Fluid Motion -->
+    <!-- GSAP for Magic Card Movement -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
@@ -18,355 +18,361 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            overflow-x: hidden;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(circle at 50% 50%, #ffffff 0%, #eef2f7 100%);
-            transition: background 1.2s ease-in-out;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            overflow-x: hidden;
         }
-        #canvas-container {
+        /* Fancy Glass Cards */
+        .fancy-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 10px 25px rgba(160, 175, 190, 0.15);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+        }
+        .fancy-card:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.25);
+            border: 1px solid rgba(212, 175, 55, 0.5);
+        }
+        /* 3D Canvas Modal Popover */
+        #spatial-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1;
+            z-index: 50;
+            background: rgba(240, 244, 248, 0.85);
+            backdrop-filter: blur(25px);
+            opacity: 0;
             pointer-events: none;
+            transition: opacity 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .ui-layer {
-            position: relative;
-            z-index: 2;
-            pointer-events: none;
-        }
-        .interactive {
+        #spatial-modal.active {
+            opacity: 1;
             pointer-events: auto;
         }
-        /* Premium Light Glassmorphism Cards */
-        .glass-item-card {
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 10px 30px rgba(142, 153, 175, 0.1);
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .glass-item-card:hover {
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(212, 175, 55, 0.5);
-            box-shadow: 0 30px 60px rgba(212, 175, 55, 0.15);
-            transform: translateY(-8px) scale(1.02);
-        }
-        .active-glass-card {
-            background: rgba(255, 255, 255, 0.9) !important;
-            border: 2px solid #D4AF37 !important;
-            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.2) !important;
+        #canvas-3d {
+            width: 500px;
+            height: 500px;
+            max-width: 90vw;
+            max-height: 50vh;
         }
     </style>
 </head>
 <body class="text-slate-800">
 
-    <!-- 3D Fluid Mesh Backdrop -->
-    <div id="canvas-container"></div>
-
-    <!-- Interface Wrapper -->
-    <div class="ui-layer min-h-screen flex flex-col justify-between p-4 md:p-8">
+    <!-- 3D Interactive Modal Stage -->
+    <div id="spatial-modal" onclick="close3DSpace()">
+        <div class="text-center pointer-events-none absolute top-12">
+            <h2 id="modal-item-name" class="text-2xl md:text-4xl font-extrabold tracking-tight text-amber-600 uppercase">Product</h2>
+            <p class="text-xs text-slate-400 mt-1 uppercase tracking-widest">Drag with mouse to rotate item card in full 3D space</p>
+        </div>
         
-        <!-- Minimal Luxury Header -->
-        <header class="w-full bg-white/60 backdrop-blur-lg rounded-2xl border border-white/80 p-5 flex flex-col md:flex-row justify-between items-center interactive shadow-sm">
+        <!-- The Actual 3D Morphing Container -->
+        <div id="canvas-3d" class="pointer-events-auto"></div>
+
+        <button class="absolute bottom-12 px-6 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-full shadow-lg transition-all text-xs tracking-wider uppercase">
+            ← Tap Anywhere to Close
+        </button>
+    </div>
+
+    <!-- Main Web Container -->
+    <div class="min-h-screen flex flex-col justify-between p-4 md:p-8">
+        
+        <!-- Fancy Light Navigation Header -->
+        <header class="w-full bg-white/70 backdrop-blur-md rounded-3xl border border-white p-6 flex flex-col md:flex-row justify-between items-center shadow-sm">
             <div class="text-center md:text-left">
-                <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-amber-500 uppercase">Kangan Fancy Store</h1>
-                <p class="text-[10px] tracking-[0.3em] text-slate-400 font-semibold uppercase mt-0.5">Siraha, Nepal • Luxury Fluid Space</p>
+                <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-500 uppercase">Kangan Fancy Store</h1>
+                <p class="text-[10px] tracking-[0.4em] text-slate-400 font-bold uppercase mt-1">Siraha, Nepal • Next-Gen Card-To-3D Realms</p>
             </div>
-            <!-- Local Integrated Payment Modules -->
-            <div class="flex flex-wrap justify-center gap-2 mt-3 md:mt-0 text-[10px] font-bold tracking-wide">
-                <span class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full border border-emerald-200">eSewa Instant</span>
-                <span class="px-3 py-1 bg-purple-50 text-purple-600 rounded-full border border-purple-200">Khalti Pay</span>
-                <span class="px-3 py-1 bg-amber-50 text-amber-700 rounded-full border border-amber-200">COD Available</span>
+            <div class="flex flex-wrap justify-center gap-2 mt-4 md:mt-0 text-[10px] font-bold tracking-wide">
+                <span class="px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-full border border-emerald-200">eSewa Instant</span>
+                <span class="px-3 py-1.5 bg-purple-50 text-purple-600 rounded-full border border-purple-200">Khalti Pay</span>
+                <span class="px-3 py-1.5 bg-amber-50 text-amber-700 rounded-full border border-amber-200">Cash On Delivery</span>
             </div>
         </header>
 
-        <!-- Dynamic Title Showcase Area -->
-        <div class="w-full text-center my-auto py-6">
-            <h2 id="status-title" class="text-sm md:text-base font-bold tracking-[0.25em] uppercase text-slate-400 transition-colors duration-500">
-                ✨ Tap any luxury asset below to morph the crystal space ✨
+        <!-- Dynamic Title Showcase -->
+        <div class="w-full text-center py-8">
+            <h2 class="text-sm md:text-base font-extrabold tracking-[0.2em] uppercase text-amber-600/70">
+                ✨ Click any card below to turn it into an interactive 3D Object ✨
             </h2>
         </div>
 
-        <!-- 20+ Items Grid Section -->
-        <main class="w-full max-w-7xl mx-auto mb-6 interactive">
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4" id="grid-container">
+        <!-- 20+ Comprehensive Luxury Retail Items -->
+        <main class="w-full max-w-7xl mx-auto mb-12">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-5" id="inventory-grid">
                 
-                <!-- 20 Highly Detailed Curated Luxury Retail Items -->
-                <div class="glass-item-card active-glass-card rounded-2xl p-4 cursor-pointer flex flex-col justify-between" onclick="morphUniverse(this, 'Velvet Bangles Studio', '#ffffff', '#fff3e0', 0xD4AF37)">
-                    <div class="text-2xl mb-2">💫</div>
-                    <div><h3 class="font-bold text-xs text-slate-700">Velvet Bangles</h3><p class="text-[9px] text-slate-400">Classic Premium Pack</p></div>
-                    <div class="flex justify-between items-center mt-3 border-t border-slate-100 pt-2"><span class="text-xs font-extrabold text-amber-600">Rs. 1,200</span><span class="text-[9px] bg-amber-50 text-amber-700 px-1.5 py-0.5 rounded">Active</span></div>
+                <!-- Item 1 -->
+                <div class="fancy-card rounded-3xl p-5 flex flex-col justify-between h-64" onclick="openIn3D('Velvet Bangles', '💫', 0xD4AF37, '#fff3e0')">
+                    <div class="w-full h-32 bg-amber-50/50 rounded-2xl flex items-center justify-center text-5xl shadow-inner mb-2">💫</div>
+                    <div><h3 class="font-extrabold text-sm text-slate-700">Velvet Bangles</h3><p class="text-[10px] text-slate-400">Premium Matte Pack</p></div>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100"><span class="text-xs font-black text-amber-600">Rs. 1,200</span><span class="text-[9px] text-amber-500 font-bold uppercase tracking-wider">Morph 3D</span></div>
                 </div>
 
-                <div class="glass-item-card rounded-2xl p-4 cursor-pointer flex flex-col justify-between" onclick="morphUniverse(this, 'Bridal Chura Domain', '#ffffff', '#fce4ec', 0xE0115F)">
-                    <div class="text-2xl mb-2">👑</div>
-                    <div><h3 class="font-bold text-xs text-slate-700">Bridal Chura</h3><p class="text-[9px] text-slate-400">Heavy Marriage Set</p></div>
-                    <div class="flex justify-between items-center mt-3 border-t border-slate-100 pt-2"><span class="text-xs font-extrabold text-amber-600">Rs. 4,500</span><span class="text-[9px] text-slate-400">Morph</span></div>
+                <!-- Item 2 -->
+                <div class="fancy-card rounded-3xl p-5 flex flex-col justify-between h-64" onclick="openIn3D('Bridal Chura', '👑', 0xE0115F, '#fce4ec')">
+                    <div class="w-full h-32 bg-pink-50/50 rounded-2xl flex items-center justify-center text-5xl shadow-inner mb-2">👑</div>
+                    <div><h3 class="font-extrabold text-sm text-slate-700">Bridal Chura</h3><p class="text-[10px] text-slate-400">Heavy Marriage Set</p></div>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100"><span class="text-xs font-black text-amber-600">Rs. 4,500</span><span class="text-[9px] text-pink-500 font-bold uppercase tracking-wider">Morph 3D</span></div>
                 </div>
 
-                <div class="glass-item-card rounded-2xl p-4 cursor-pointer flex flex-col justify-between" onclick="morphUniverse(this, 'Gold-plated Jhumkas Suite', '#ffffff', '#fffde7', 0xFFB300)">
-                    <div class="text-2xl mb-2">✨</div>
-                    <div><h3 class="font-bold text-xs text-slate-700">Gold Jhumkas</h3><p class="text-[9px] text-slate-400">Polished Designer Cut</p></div>
-                    <div class="flex justify-between items-center mt-3 border-t border-slate-100 pt-2"><span class="text-xs font-extrabold text-amber-600">Rs. 2,400</span><span class="text-[9px] text-slate-400">Morph</span></div>
+                <!-- Item 3 -->
+                <div class="fancy-card rounded-3xl p-5 flex flex-col justify-between h-64" onclick="openIn3D('Gold Jhumkas', '✨', 0xFFB300, '#fffde7')">
+                    <div class="w-full h-32 bg-yellow-50/50 rounded-2xl flex items-center justify-center text-5xl shadow-inner mb-2">✨</div>
+                    <div><h3 class="font-extrabold text-sm text-slate-700">Gold Jhumkas</h3><p class="text-[10px] text-slate-400">Polished Designer Cut</p></div>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100"><span class="text-xs font-black text-amber-600">Rs. 2,400</span><span class="text-[9px] text-amber-500 font-bold uppercase tracking-wider">Morph 3D</span></div>
                 </div>
 
-                <div class="glass-item-card rounded-2xl p-4 cursor-pointer flex flex-col justify-between" onclick="morphUniverse(this, 'Matte Lipstick Lab', '#ffffff', '#ffebee', 0xFF4081)">
-                    <div class="text-2xl mb-2">💄</div>
-                    <div><h3 class="font-bold text-xs text-slate-700">Matte Lipstick</h3><p class="text-[9px] text-slate-400">24hr Intense Stay</p></div>
-                    <div class="flex justify-between items-center mt-3 border-t border-slate-100 pt-2"><span class="text-xs font-extrabold text-amber-600">Rs. 850</span><span class="text-[9px] text-slate-400">Morph</span></div>
+                <!-- Item 4 -->
+                <div class="fancy-card rounded-3xl p-5 flex flex-col justify-between h-64" onclick="openIn3D('Matte Lipstick', '💄', 0xFF4081, '#ffebee')">
+                    <div class="w-full h-32 bg-red-50/50 rounded-2xl flex items-center justify-center text-5xl shadow-inner mb-2">💄</div>
+                    <div><h3 class="font-extrabold text-sm text-slate-700">Matte Lipstick</h3><p class="text-[10px] text-slate-400">24hr Waterproof Stay</p></div>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100"><span class="text-xs font-black text-amber-600">Rs. 850</span><span class="text-[9px] text-red-500 font-bold uppercase tracking-wider">Morph 3D</span></div>
                 </div>
 
-                <div class="glass-item-card rounded-2xl p-4 cursor-pointer flex flex-col justify-between" onclick="morphUniverse(this, 'HD Foundation Space', '#ffffff', '#efebe9', 0x8D6E63)">
-                    <div class="text-2xl mb-2">🧪</div>
-                    <div><h3 class="font-bold text-xs text-slate-700">HD Foundation</h3><p class="text-[9px] text-slate-400">Flawless Waterproof Base</p></div>
-                    <div class="flex justify-between items-center mt-3 border-t border-slate-100 pt-2"><span class="text-xs font-extrabold text-amber-600">Rs. 1,650</span><span class="text-[9px] text-slate-400">Morph</span></div>
+                <!-- Item 5 -->
+                <div class="fancy-card rounded-3xl p-5 flex flex-col justify-between h-64" onclick="openIn3D('HD Foundation', '🧪', 0x8D6E63, '#efebe9')">
+                    <div class="w-full h-32 bg-amber-900/5 rounded-2xl flex items-center justify-center text-5xl shadow-inner mb-2">🧪</div>
+                    <div><h3 class="font-extrabold text-sm text-slate-700">HD Foundation</h3><p class="text-[10px] text-slate-400">Flawless Fluid Base</p></div>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100"><span class="text-xs font-black text-amber-600">Rs. 1,650</span><span class="text-[9px] text-amber-700 font-bold uppercase tracking-wider">Morph 3D</span></div>
                 </div>
 
-                <div class="glass-item-card rounded-2xl p-4 cursor-pointer flex flex-col justify-between" onclick="morphUniverse(this, 'Bridal Makeup Kit Zone', '#ffffff', '#f3e5f5', 0xBA68C8)">
-                    <div class="text-2xl mb-2">💼</div>
-                    <div><h3 class="font-bold text-xs text-slate-700">Bridal Makeup Kit</h3><p class="text-[9px] text-slate-400">Complete Deluxe Palette</p></div>
-                    <div class="flex justify-between items-center mt-3 border-t border-slate-100 pt-2"><span class="text-xs font-extrabold text-amber-600">Rs. 8,500</span><span class="text-[9px] text-slate-400">Morph</span></div>
+                <!-- Item 6 -->
+                <div class="fancy-card rounded-3xl p-5 flex flex-col justify-between h-64" onclick="openIn3D('Bridal Makeup Kit', '💼', 0xBA68C8, '#f3e5f5')">
+                    <div class="w-full h-32 bg-purple-50/50 rounded-2xl flex items-center justify-center text-5xl shadow-inner mb-2">💼</div>
+                    <div><h3 class="font-extrabold text-sm text-slate-700">Makeup Kit</h3><p class="text-[10px] text-slate-400">Complete Deluxe Box</p></div>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100"><span class="text-xs font-black text-amber-600">Rs. 8,500</span><span class="text-[9px] text-purple-500 font-bold uppercase tracking-wider">Morph 3D</span></div>
                 </div>
 
-                <div class="glass-item-card rounded-2xl p-4 cursor-pointer flex flex-col justify-between" onclick="morphUniverse(this, 'Henna Cones Natural', '#ffffff', '#f1f8e9', 0x7CB342)">
-                    <div class="text-2xl mb-2">🌿</div>
-                    <div><h3 class="font-bold text-xs text-slate-700">Henna Cones</h3><p class="text-[9px] text-slate-400">Pure Organic Red Ink</p></div>
-                    <div class="flex justify-between items-center mt-3 border-t border-slate-100 pt-2"><span class="text-xs font-extrabold text-amber-600">Rs. 150</span><span class="text-[9px] text-slate-400">Morph</span></div>
+                <!-- Item 7 -->
+                <div class="fancy-card rounded-3xl p-5 flex flex-col justify-between h-64" onclick="openIn3D('Henna Cones', '🌿', 0x7CB342, '#f1f8e9')">
+                    <div class="w-full h-32 bg-green-50/50 rounded-2xl flex items-center justify-center text-5xl shadow-inner mb-2">🌿</div>
+                    <div><h3 class="font-extrabold text-sm text-slate-700">Henna Cones</h3><p class="text-[10px] text-slate-400">Pure Organic Red Ink</p></div>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100"><span class="text-xs font-black text-amber-600">Rs. 150</span><span class="text-[9px] text-green-500 font-bold uppercase tracking-wider">Morph 3D</span></div>
                 </div>
 
-                <div class="glass-item-card rounded-2xl p-4 cursor-pointer flex flex-col justify-between" onclick="morphUniverse(this, 'Fancy Hair Clips Hub', '#ffffff', '#e0f7fa', 0x00ACC1)">
-                    <div class="text-2xl mb-2">🎀</div>
-                    <div><h3 class="font-bold text-xs text-slate-700">Fancy Hair Clips</h3><p class="text-[9px] text-slate-400">Crystal Diamond Studded</p></div>
-                    <div class="flex justify-between items-center mt-3 border-t border-slate-100 pt-2"><span class="text-xs font-extrabold text-amber-600">Rs. 350</span><span class="text-[9px] text-slate-400">Morph</span></div>
+                <!-- Item 8 -->
+                <div class="fancy-card rounded-3xl p-5 flex flex-col justify-between h-64" onclick="openIn3D('Fancy Hair Clips', '🎀', 0x00ACC1, '#e0f7fa')">
+                    <div class="w-full h-32 bg-cyan-50/50 rounded-2xl flex items-center justify-center text-5xl shadow-inner mb-2">🎀</div>
+                    <div><h3 class="font-extrabold text-sm text-slate-700">Fancy Hair Clips</h3><p class="text-[10px] text-slate-400">Crystal Diamond Stud</p></div>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100"><span class="text-xs font-black text-amber-600">Rs. 350</span><span class="text-[9px] text-cyan-500 font-bold uppercase tracking-wider">Morph 3D</span></div>
                 </div>
 
-                <div class="glass-item-card rounded-2xl p-4 cursor-pointer flex flex-col justify-between" onclick="morphUniverse(this, 'Royal Rani Haar Vault', '#ffffff', '#fff8e1', 0xFFA000)">
-                    <div class="text-2xl mb-2">📿</div>
-                    <div><h3 class="font-bold text-xs text-slate-700">Gold Rani Haar</h3><p class="text-[9px] text-slate-400">Traditional Long Choker</p></div>
-                    <div class="flex justify-between items-center mt-3 border-t border-slate-100 pt-2"><span class="text-xs font-extrabold text-amber-600">Rs. 12,500</span><span class="text-[9px] text-slate-400">Morph</span></div>
+                <!-- Item 9 -->
+                <div class="fancy-card rounded-3xl p-5 flex flex-col justify-between h-64" onclick="openIn3D('Gold Rani Haar', '📿', 0xFFA000, '#fff8e1')">
+                    <div class="w-full h-32 bg-yellow-100/30 rounded-2xl flex items-center justify-center text-5xl shadow-inner mb-2">📿</div>
+                    <div><h3 class="font-extrabold text-sm text-slate-700">Gold Rani Haar</h3><p class="text-[10px] text-slate-400">Traditional Long Chain</p></div>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100"><span class="text-xs font-black text-amber-600">Rs. 12,500</span><span class="text-[9px] text-amber-600 font-bold uppercase tracking-wider">Morph 3D</span></div>
                 </div>
 
-                <div class="glass-item-card rounded-2xl p-4 cursor-pointer flex flex-col justify-between" onclick="morphUniverse(this, 'Bridal Payal Symphony', '#ffffff', '#eceff1', 0x78909C)">
-                    <div class="text-2xl mb-2">🔔</div>
-                    <div><h3 class="font-bold text-xs text-slate-700">Bridal Payal</h3><p class="text-[9px] text-slate-400">Silver Ghungroo Set</p></div>
-                    <div class="flex justify-between items-center mt-3 border-t border-slate-100 pt-2"><span class="text-xs font-extrabold text-amber-600">Rs. 1,800</span><span class="text-[9px] text-slate-400">Morph</span></div>
+                <!-- Item 10 -->
+                <div class="fancy-card rounded-3xl p-5 flex flex-col justify-between h-64" onclick="openIn3D('Bridal Payal', '🔔', 0x78909C, '#eceff1')">
+                    <div class="w-full h-32 bg-slate-100/60 rounded-2xl flex items-center justify-center text-5xl shadow-inner mb-2">🔔</div>
+                    <div><h3 class="font-extrabold text-sm text-slate-700">Bridal Payal</h3><p class="text-[10px] text-slate-400">Silver Ghungroo Set</p></div>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100"><span class="text-xs font-black text-amber-600">Rs. 1,800</span><span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Morph 3D</span></div>
                 </div>
 
-                <!-- Next 10 continuous items for full grid -->
-                <div class="glass-item-card rounded-2xl p-4 cursor-pointer flex flex-col justify-between" onclick="morphUniverse(this, 'Nail Polish Canvas', '#ffffff', '#fce4ec', 0xD81B60)">
-                    <div class="text-2xl mb-2">💅</div>
-                    <div><h3 class="font-bold text-xs text-slate-700">Nail Polish Pack</h3><p class="text-[9px] text-slate-400">Glossy Luxury Combo</p></div>
-                    <div class="flex justify-between items-center mt-3 border-t border-slate-100 pt-2"><span class="text-xs font-extrabold text-amber-600">Rs. 950</span><span class="text-[9px] text-slate-400">Morph</span></div>
+                <!-- Item 11 -->
+                <div class="fancy-card rounded-3xl p-5 flex flex-col justify-between h-64" onclick="openIn3D('Nail Polish Pack', '💅', 0xD81B60, '#fce4ec')">
+                    <div class="w-full h-32 bg-rose-50/50 rounded-2xl flex items-center justify-center text-5xl shadow-inner mb-2">💅</div>
+                    <div><h3 class="font-extrabold text-sm text-slate-700">Nail Polish Pack</h3><p class="text-[10px] text-slate-400">Glossy Luxury Combo</p></div>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100"><span class="text-xs font-black text-amber-600">Rs. 950</span><span class="text-[9px] text-rose-500 font-bold uppercase tracking-wider">Morph 3D</span></div>
                 </div>
 
-                <div class="glass-item-card rounded-2xl p-4 cursor-pointer flex flex-col justify-between" onclick="morphUniverse(this, 'Eye Shadow Spectrum', '#ffffff', '#ede7f6', 0x5E35B1)">
-                    <div class="text-2xl mb-2">👁️</div>
-                    <div><h3 class="font-bold text-xs text-slate-700">Eyeshadow Palette</h3><p class="text-[9px] text-slate-400">24 Ultra-Glitter Shades</p></div>
-                    <div class="flex justify-between items-center mt-3 border-t border-slate-100 pt-2"><span class="text-xs font-extrabold text-amber-600">Rs. 2,200</span><span class="text-[9px] text-slate-400">Morph</span></div>
+                <!-- Item 12 -->
+                <div class="fancy-card rounded-3xl p-5 flex flex-col justify-between h-64" onclick="openIn3D('Eyeshadow Palette', '👁️', 0x5E35B1, '#ede7f6')">
+                    <div class="w-full h-32 bg-deep-purple-50/50 rounded-2xl flex items-center justify-center text-5xl shadow-inner mb-2">👁️</div>
+                    <div><h3 class="font-extrabold text-sm text-slate-700">Eyeshadow Palette</h3><p class="text-[10px] text-slate-400">24 Glitter Shades</p></div>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100"><span class="text-xs font-black text-amber-600">Rs. 2,200</span><span class="text-[9px] text-purple-500 font-bold uppercase tracking-wider">Morph 3D</span></div>
                 </div>
 
-                <div class="glass-item-card rounded-2xl p-4 cursor-pointer flex flex-col justify-between" onclick="morphUniverse(this, 'Maang Tikka Tiara', '#ffffff', '#fffbf0', 0xE5A93C)">
-                    <div class="text-2xl mb-2">👑</div>
-                    <div><h3 class="font-bold text-xs text-slate-700">Maang Tikka</h3><p class="text-[9px] text-slate-400">Elegant Forehead Jewels</p></div>
-                    <div class="flex justify-between items-center mt-3 border-t border-slate-100 pt-2"><span class="text-xs font-extrabold text-amber-600">Rs. 1,450</span><span class="text-[9px] text-slate-400">Morph</span></div>
+                <!-- Item 13 -->
+                <div class="fancy-card rounded-3xl p-5 flex flex-col justify-between h-64" onclick="openIn3D('Maang Tikka', '👑', 0xE5A93C, '#fffbf0')">
+                    <div class="w-full h-32 bg-amber-100/20 rounded-2xl flex items-center justify-center text-5xl shadow-inner mb-2">👑</div>
+                    <div><h3 class="font-extrabold text-sm text-slate-700">Maang Tikka</h3><p class="text-[10px] text-slate-400">Forehead Jewel Set</p></div>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100"><span class="text-xs font-black text-amber-600">Rs. 1,450</span><span class="text-[9px] text-amber-500 font-bold uppercase tracking-wider">Morph 3D</span></div>
                 </div>
 
-                <div class="glass-item-card rounded-2xl p-4 cursor-pointer flex flex-col justify-between" onclick="morphUniverse(this, 'Intense Kajal Vault', '#ffffff', '#f5f5f5', 0x212121)">
-                    <div class="text-2xl mb-2">✏️</div>
-                    <div><h3 class="font-bold text-xs text-slate-700">Waterproof Kajal</h3><p class="text-[9px] text-slate-400">Smudgeproof Dark Line</p></div>
-                    <div class="flex justify-between items-center mt-3 border-t border-slate-100 pt-2"><span class="text-xs font-extrabold text-amber-600">Rs. 450</span><span class="text-[9px] text-slate-400">Morph</span></div>
+                <!-- Item 14 -->
+                <div class="fancy-card rounded-3xl p-5 flex flex-col justify-between h-64" onclick="openIn3D('Waterproof Kajal', '✏️', 0x212121, '#f5f5f5')">
+                    <div class="w-full h-32 bg-neutral-100 rounded-2xl flex items-center justify-center text-5xl shadow-inner mb-2">✏️</div>
+                    <div><h3 class="font-extrabold text-sm text-slate-700">Waterproof Kajal</h3><p class="text-[10px] text-slate-400">Smudgeproof Dark Line</p></div>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100"><span class="text-xs font-black text-amber-600">Rs. 450</span><span class="text-[9px] text-neutral-600 font-bold uppercase tracking-wider">Morph 3D</span></div>
                 </div>
 
-                <div class="glass-item-card rounded-2xl p-4 cursor-pointer flex flex-col justify-between" onclick="morphUniverse(this, 'Oud Scent Chamber', '#ffffff', '#e0f2f1', 0x00796B)">
-                    <div class="text-2xl mb-2">🔮</div>
-                    <div><h3 class="font-bold text-xs text-slate-700">Luxury Perfume</h3><p class="text-[9px] text-slate-400">Kangan Special Royal Oud</p></div>
-                    <div class="flex justify-between items-center mt-3 border-t border-slate-100 pt-2"><span class="text-xs font-extrabold text-amber-600">Rs. 3,800</span><span class="text-[9px] text-slate-400">Morph</span></div>
+                <!-- Item 15 -->
+                <div class="fancy-card rounded-3xl p-5 flex flex-col justify-between h-64" onclick="openIn3D('Luxury Perfume', '🔮', 0x00796B, '#e0f2f1')">
+                    <div class="w-full h-32 bg-teal-50/50 rounded-2xl flex items-center justify-center text-5xl shadow-inner mb-2">🔮</div>
+                    <div><h3 class="font-extrabold text-sm text-slate-700">Luxury Perfume</h3><p class="text-[10px] text-slate-400">Special Royal Oud</p></div>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100"><span class="text-xs font-black text-amber-600">Rs. 3,800</span><span class="text-[9px] text-teal-600 font-bold uppercase tracking-wider">Morph 3D</span></div>
                 </div>
 
-                <div class="glass-item-card rounded-2xl p-4 cursor-pointer flex flex-col justify-between" onclick="morphUniverse(this, 'Designer Kada Domain', '#ffffff', '#fdf2f8', 0xEC4899)">
-                    <div class="text-2xl mb-2">💫</div>
-                    <div><h3 class="font-bold text-xs text-slate-700">Fancy Kada Sets</h3><p class="text-[9px] text-slate-400">Heavy Gold-Plated Pair</p></div>
-                    <div class="flex justify-between items-center mt-3 border-t border-slate-100 pt-2"><span class="text-xs font-extrabold text-amber-600">Rs. 1,600</span><span class="text-[9px] text-slate-400">Morph</span></div>
+                <!-- Item 16 -->
+                <div class="fancy-card rounded-3xl p-5 flex flex-col justify-between h-64" onclick="openIn3D('Fancy Kada Sets', '💫', 0xEC4899, '#fdf2f8')">
+                    <div class="w-full h-32 bg-pink-50/40 rounded-2xl flex items-center justify-center text-5xl shadow-inner mb-2">💫</div>
+                    <div><h3 class="font-extrabold text-sm text-slate-700">Fancy Kada Sets</h3><p class="text-[10px] text-slate-400">Heavy Gold-Plated Pair</p></div>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100"><span class="text-xs font-black text-amber-600">Rs. 1,600</span><span class="text-[9px] text-pink-500 font-bold uppercase tracking-wider">Morph 3D</span></div>
                 </div>
 
-                <div class="glass-item-card rounded-2xl p-4 cursor-pointer flex flex-col justify-between" onclick="morphUniverse(this, 'Juda Brooch Pavilion', '#ffffff', '#f0f4f8', 0x4B5563)">
-                    <div class="text-2xl mb-2">🔱</div>
-                    <div><h3 class="font-bold text-xs text-slate-700">Bridal Hair Brooch</h3><p class="text-[9px] text-slate-400">Pearl Hair Ornament</p></div>
-                    <div class="flex justify-between items-center mt-3 border-t border-slate-100 pt-2"><span class="text-xs font-extrabold text-amber-600">Rs. 750</span><span class="text-[9px] text-slate-400">Morph</span></div>
+                <!-- Item 17 -->
+                <div class="fancy-card rounded-3xl p-5 flex flex-col justify-between h-64" onclick="openIn3D('Bridal Hair Brooch', '🔱', 0x4B5563, '#f0f4f8')">
+                    <div class="w-full h-32 bg-slate-100/70 rounded-2xl flex items-center justify-center text-5xl shadow-inner mb-2">🔱</div>
+                    <div><h3 class="font-extrabold text-sm text-slate-700">Hair Brooch juda</h3><p class="text-[10px] text-slate-400">Pearl Hair Ornament</p></div>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100"><span class="text-xs font-black text-amber-600">Rs. 750</span><span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Morph 3D</span></div>
                 </div>
 
-                <div class="glass-item-card rounded-2xl p-4 cursor-pointer flex flex-col justify-between" onclick="morphUniverse(this, 'Glow Essence Fountain', '#ffffff', '#fff3e0', 0xE65100)">
-                    <div class="text-2xl mb-2">✨</div>
-                    <div><h3 class="font-bold text-xs text-slate-700">Skin Glow Serum</h3><p class="text-[9px] text-slate-400">Vitamin C Bright Booster</p></div>
-                    <div class="flex justify-between items-center mt-3 border-t border-slate-100 pt-2"><span class="text-xs font-extrabold text-amber-600">Rs. 1,400</span><span class="text-[9px] text-slate-400">Morph</span></div>
+                <!-- Item 18 -->
+                <div class="fancy-card rounded-3xl p-5 flex flex-col justify-between h-64" onclick="openIn3D('Skin Glow Serum', '✨', 0xE65100, '#fff3e0')">
+                    <div class="w-full h-32 bg-orange-50/50 rounded-2xl flex items-center justify-center text-5xl shadow-inner mb-2">✨</div>
+                    <div><h3 class="font-extrabold text-sm text-slate-700">Skin Glow Serum</h3><p class="text-[10px] text-slate-400">Vitamin C Brightener</p></div>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100"><span class="text-xs font-black text-amber-600">Rs. 1,400</span><span class="text-[9px] text-orange-500 font-bold uppercase tracking-wider">Morph 3D</span></div>
                 </div>
 
-                <div class="glass-item-card rounded-2xl p-4 cursor-pointer flex flex-col justify-between" onclick="morphUniverse(this, 'Nath Royal Dimension', '#ffffff', '#fffaf0', 0xD97706)">
-                    <div class="text-2xl mb-2">⭕</div>
-                    <div><h3 class="font-bold text-xs text-slate-700">Traditional Nath</h3><p class="text-[9px] text-slate-400">Siraha Gold Nose Loop</p></div>
-                    <div class="flex justify-between items-center mt-3 border-t border-slate-100 pt-2"><span class="text-xs font-extrabold text-amber-600">Rs. 1,100</span><span class="text-[9px] text-slate-400">Morph</span></div>
+                <!-- Item 19 -->
+                <div class="fancy-card rounded-3xl p-5 flex flex-col justify-between h-64" onclick="openIn3D('Traditional Nath', '⭕', 0xD97706, '#fffaf0')">
+                    <div class="w-full h-32 bg-amber-50/60 rounded-2xl flex items-center justify-center text-5xl shadow-inner mb-2">⭕</div>
+                    <div><h3 class="font-extrabold text-sm text-slate-700">Traditional Nath</h3><p class="text-[10px] text-slate-400">Siraha Gold Nose Loop</p></div>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100"><span class="text-xs font-black text-amber-600">Rs. 1,100</span><span class="text-[9px] text-amber-600 font-bold uppercase tracking-wider">Morph 3D</span></div>
                 </div>
 
-                <div class="glass-item-card rounded-2xl p-4 cursor-pointer flex flex-col justify-between" onclick="morphUniverse(this, 'Velvet Compact Base', '#ffffff', '#fafaf9', 0x78716C)">
-                    <div class="text-2xl mb-2">🪞</div>
-                    <div><h3 class="font-bold text-xs text-slate-700">Premium Compact</h3><p class="text-[9px] text-slate-400">Oil Control Face Powder</p></div>
-                    <div class="flex justify-between items-center mt-3 border-t border-slate-100 pt-2"><span class="text-xs font-extrabold text-amber-600">Rs. 800</span><span class="text-[9px] text-slate-400">Morph</span></div>
+                <!-- Item 20 -->
+                <div class="fancy-card rounded-3xl p-5 flex flex-col justify-between h-64" onclick="openIn3D('Premium Compact', '🪞', 0x78716C, '#fafaf9')">
+                    <div class="w-full h-32 bg-stone-100 rounded-2xl flex items-center justify-center text-5xl shadow-inner mb-2">🪞</div>
+                    <div><h3 class="font-extrabold text-sm text-slate-700">Premium Compact</h3><p class="text-[10px] text-slate-400">Oil Control Powder</p></div>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100"><span class="text-xs font-black text-amber-600">Rs. 800</span><span class="text-[9px] text-stone-500 font-bold uppercase tracking-wider">Morph 3D</span></div>
                 </div>
 
             </div>
         </main>
 
-        <!-- Spatial Minimal Footer -->
-        <footer class="w-full text-center py-4 border-t border-slate-200/60 mt-4 bg-white/30 backdrop-blur-sm rounded-xl interactive">
-            <p class="text-[11px] text-slate-400 font-medium tracking-wide">&copy; 2026 Kangan Fancy Store • Siraha, Nepal. Powered by Fluid 3D Core.</p>
+        <!-- Minimal Soft Footer -->
+        <footer class="w-full text-center py-4 border-t border-slate-200/60 bg-white/40 backdrop-blur-sm rounded-2xl">
+            <p class="text-xs text-slate-400 font-semibold tracking-wide">&copy; 2026 Kangan Fancy Store • Siraha, Nepal. Powered by Real-Time Card Morphing.</p>
         </footer>
     </div>
 
-    <!-- Core Three.js Computational Core Engine -->
+    <!-- 3D Spatial Engine Script -->
     <script>
-        const container = document.getElementById('canvas-container');
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 3.5;
+        let scene, camera, renderer, activeMesh;
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+        const modal = document.getElementById('spatial-modal');
+        const container = document.getElementById('canvas-3d');
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        container.appendChild(renderer.domElement);
+        // Initialize clean 3D Canvas
+        function init3DEngine() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
+            camera.position.z = 5;
 
-        // Ambient Minimal Luxury Studio Lights
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
-        scene.add(ambientLight);
-        const topLight = new THREE.DirectionalLight(0xffffff, 1);
-        topLight.position.set(5, 10, 7);
-        scene.add(topLight);
-        const colorfulLight = new THREE.PointLight(0xD4AF37, 1.5, 10);
-        colorfulLight.position.set(-2, -2, 2);
-        scene.add(colorfulLight);
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
 
-        // ORGANIC 3D FLUID BLOB GEOMETRY (Ultra Unique Liquid Effect)
-        const geometry = new THREE.IcosahedronGeometry(1, 5); // Smooth sphere matrix
-        
-        // Save initial coordinates to create complex liquid deform mathematical vectors
-        const originalPositions = geometry.attributes.position.clone();
-
-        const material = new THREE.MeshStandardMaterial({
-            color: 0xD4AF37,
-            metalness: 0.1,
-            roughness: 0.2,
-            clearcoat: 1.0,
-            clearcoatRoughness: 0.1,
-            wireframe: false // Fully solid premium glass skin
-        });
-        const fluidMesh = new THREE.Mesh(geometry, material);
-        scene.add(fluidMesh);
-
-        // Floating particles layer
-        const starGeo = new THREE.BufferGeometry();
-        const starCount = 300;
-        const starPos = new Float32Array(starCount * 3);
-        for(let i=0; i<starCount*3; i++) {
-            starPos[i] = (Math.random() - 0.5) * 8;
+            // Bright Luxury Lighting
+            const ambient = new THREE.AmbientLight(0xffffff, 0.8);
+            scene.add(ambient);
+            const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+            dirLight.position.set(5, 5, 5);
+            scene.add(dirLight);
         }
-        starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-        const starMat = new THREE.PointsMaterial({ size: 0.03, color: 0xD4AF37, transparent: true, opacity: 0.4 });
-        const starField = new THREE.Points(starGeo, starMat);
-        scene.add(starField);
 
-        // Core Render Dynamic Loop
+        // Trigger individual card to morph into interactive 3D Cube
+        function openIn3D(name, icon, hexColor, cardBgHex) {
+            document.getElementById('modal-item-name').innerText = name;
+            modal.classList.add('active');
+            
+            if(!scene) init3DEngine();
+
+            // Clear previous models if any
+            if(activeMesh) scene.remove(activeMesh);
+
+            // CREATE DYNAMIC 3D FLOATING PLATE (The Morph Effect)
+            const geometry = new THREE.BoxGeometry(2, 2.5, 0.15); // Dynamic 3D Box/Card shape
+            
+            // Front & Back material styling dynamically
+            const material = new THREE.MeshStandardMaterial({
+                color: hexColor,
+                metalness: 0.2,
+                roughness: 0.3,
+                clearcoat: 1.0
+            });
+
+            activeMesh = new THREE.Mesh(geometry, material);
+            scene.add(activeMesh);
+
+            // Pop entry animation using GSAP directly on the 3D Object
+            activeMesh.rotation.set(0, 0, 0);
+            gsap.from(activeMesh.scale, { x: 0, y: 0, z: 0, duration: 0.6, ease: "back.out(1.7)" });
+            gsap.from(activeMesh.rotation, { y: 3.14 * 2, duration: 1.2, ease: "power2.out" });
+
+            // Dynamic Modal Background update to match item aesthetic smoothly
+            gsap.to(modal, { backgroundColor: cardBgHex + "E6", duration: 0.4 });
+        }
+
+        function close3DSpace() {
+            modal.classList.remove('active');
+        }
+
+        // Continuous Gentle Float Spin
         const clock = new THREE.Clock();
-        function updateShowroom() {
-            requestAnimationFrame(updateShowroom);
-            const time = clock.getElapsedTime();
-
-            // Organic Fluid Mathematical Distortion Formula
-            const positionAttribute = fluidMesh.geometry.attributes.position;
-            const vertex = new THREE.Vector3();
-
-            for (let i = 0; i < positionAttribute.count; i++) {
-                vertex.fromBufferAttribute(originalPositions, i);
-                
-                // Pure trigonometry waving function to make mesh stretch like water/liquid jelly
-                const waveX = Math.sin(vertex.x * 2 + time * 1.5) * 0.12;
-                const waveY = Math.cos(vertex.y * 2 + time * 1.3) * 0.12;
-                const waveZ = Math.sin(vertex.z * 2 + time * 1.7) * 0.12;
-                
-                vertex.addScalar(waveX + waveY + waveZ);
-                positionAttribute.setXYZ(i, vertex.x, vertex.y, vertex.z);
+        function animate() {
+            requestAnimationFrame(animate);
+            if(activeMesh && !isDragging) {
+                const elapsed = clock.getElapsedTime();
+                activeMesh.rotation.y = elapsed * 0.5;
+                activeMesh.position.y = Math.sin(elapsed * 2) * 0.1; // Float effect
             }
-            positionAttribute.needsUpdate = true; // Inject update into GPU frame live
-
-            // Gentle Rotation Spins
-            fluidMesh.rotation.y = time * 0.2;
-            starField.rotation.y = time * 0.03;
-
-            renderer.render(scene, camera);
+            if(scene) renderer.render(scene, camera);
         }
-        updateShowroom();
+        animate();
 
-        // Wave entry load for premium cards
-        window.addEventListener('DOMContentLoaded', () => {
-            gsap.from(".glass-item-card", {
-                opacity: 0,
-                y: 40,
-                scale: 0.9,
-                duration: 1,
-                stagger: 0.04,
-                ease: "power3.out"
-            });
+        // MOUSE/TOUCH INTERACTION (Drag to spin the 3D Card)
+        container.addEventListener('mousedown', (e) => { isDragging = true; });
+        container.addEventListener('mousemove', (e) => {
+            const deltaMove = {
+                x: e.clientX - previousMousePosition.x,
+                y: e.clientY - previousMousePosition.y
+            };
+
+            if (isDragging && activeMesh) {
+                activeMesh.rotation.y += deltaMove.x * 0.01;
+                activeMesh.rotation.x += deltaMove.y * 0.01;
+            }
+
+            previousMousePosition = { x: e.clientX, y: e.clientY };
         });
+        window.addEventListener('mouseup', () => { isDragging = false; });
 
-        // HIGH TECH NEON MORPH MECHANISM
-        function morphUniverse(cardElement, name, startColor, endColor, hexColor) {
-            // Glow border UI management
-            document.querySelectorAll('.glass-item-card').forEach(c => {
-                c.classList.remove('active-glass-card');
-                const badge = c.querySelector('.bg-amber-50');
-                if (badge) {
-                    badge.className = 'text-[9px] text-slate-400';
-                    badge.innerText = 'Morph';
-                }
-            });
-            cardElement.classList.add('active-glass-card');
-            const activeBadge = cardElement.querySelector('.text-slate-400, .bg-amber-50');
-            if(activeBadge) {
-                activeBadge.className = 'text-[9px] bg-amber-50 text-amber-700 px-1.5 py-0.5 rounded';
-                activeBadge.innerText = 'Active';
-            }
+        // Touch handling for Mobiles
+        container.addEventListener('touchstart', (e) => { isDragging = true; previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY }; });
+        container.addEventListener('touchmove', (e) => {
+            if(!isDragging || !activeMesh) return;
+            const deltaMove = {
+                x: e.touches[0].clientX - previousMousePosition.x,
+                y: e.touches[0].clientY - previousMousePosition.y
+            };
+            activeMesh.rotation.y += deltaMove.x * 0.01;
+            activeMesh.rotation.x += deltaMove.y * 0.01;
+            previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        });
+        window.addEventListener('touchend', () => { isDragging = false; });
 
-            // Smooth Background Transition Loop
-            document.body.style.background = `radial-gradient(circle at 50% 50%, ${startColor} 0%, ${endColor} 100%)`;
-
-            // Text Update Sequence
-            const titleEl = document.getElementById('status-title');
-            titleEl.innerText = `✨ Current Dimension: ${name} ✨`;
-            titleEl.style.color = `#${hexColor.toString(16)}`;
-
-            // 3D Pulse Fluid Pop Wave
-            gsap.timeline()
-                .to(fluidMesh.scale, {x: 1.3, y: 1.3, z: 1.3, duration: 0.3, ease: "power2.out"})
-                .queue(() => {
-                    // Update exact mesh core colors smoothly
-                    fluidMesh.material.color.setHex(hexColor);
-                    starMat.color.setHex(hexColor);
-                    colorfulLight.color.setHex(hexColor);
-                })
-                .to(fluidMesh.scale, {x: 1, y: 1, z: 1, duration: 0.7, ease: "elastic.out(1, 0.5)"});
-        }
-
-        // GSAP Execution extension helper
-        gsap.registerEffect({ name: "queue", effect: (targets, config) => gsap.to(targets, {onComplete: config.onComplete}) });
-        THREE.Curve.prototype.queue = function(cb) { cb(); return this; };
-
-        // Handle scaling for perfect viewport sync
+        // Window resize adjustment
         window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            if(camera && renderer) {
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            }
         });
     </script>
 </body>
