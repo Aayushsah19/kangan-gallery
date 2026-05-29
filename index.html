@@ -3,306 +3,272 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kangan Fancy Store | Premium Luxury 3D Experience</title>
+    <title>Kangan Fancy Store | Pure HTML-to-3D Showroom</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Three.js & GSAP Core -->
+    <!-- Three.js & GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <!-- HTML2Canvas: Isse hum real-time mein pure card ko 3D texture bana denge -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;800&family=Plus+Jakarta+Sans:wght@300;400;700&display=swap');
         
         body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
+            margin: 0; padding: 0; width: 100%; height: 100%;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(circle at 50% 50%, #ffffff 0%, #f4f7f6 100%);
+            background: radial-gradient(circle at 50% 50%, #ffffff 0%, #f1f5f9 100%);
             overflow-x: hidden;
         }
+        .brand-title { font-family: 'Cinzel', serif; }
 
-        .luxury-title {
-            font-family: 'Cinzel', serif;
+        /* Fancy Interactive Cards */
+        .luxury-item-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 10px 30px rgba(148, 163, 184, 0.08);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
-        /* Premium Glass Card Design */
-        .glass-showroom-card {
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .glass-showroom-card:hover {
-            transform: translateY(-10px) scale(1.02);
+        .luxury-item-card:hover {
+            transform: translateY(-8px);
             border: 1px solid rgba(212, 175, 55, 0.6);
-            box-shadow: 0 30px 60px rgba(212, 175, 55, 0.15);
+            box-shadow: 0 25px 50px rgba(212, 175, 55, 0.12);
         }
 
-        /* Fullscreen 3D Morph Stage */
-        #luxury-3d-stage {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        /* Fullscreen 3D Reality Theatre */
+        #theatre-3d-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 100;
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(30px);
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.5s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(25px);
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.4s ease;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
         }
-
-        #luxury-3d-stage.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        #canvas-3d-viewport {
-            width: 600px;
-            height: 600px;
-            max-width: 95vw;
-            max-height: 55vh;
-        }
+        #theatre-3d-overlay.active { opacity: 1; pointer-events: auto; }
+        #canvas-3d-holder { width: 500px; height: 600px; max-width: 95vw; max-height: 60vh; }
+        
+        /* Loading animation during card morphing */
+        #loader-status { display: none; }
+        #loader-status.active { display: block; }
     </style>
 </head>
-<body class="text-neutral-800">
+<body class="text-slate-800">
 
-    <!-- THE ULTRA-LUXURY 3D POP STAGE -->
-    <div id="luxury-3d-stage">
-        <!-- Inside details -->
-        <div class="text-center mb-4 pointer-events-none">
-            <h2 id="modal-product-title" class="luxury-title text-3xl md:text-5xl font-bold tracking-widest text-amber-600 uppercase">Product</h2>
-            <p id="modal-product-desc" class="text-xs text-neutral-400 mt-2 tracking-[0.3em] uppercase">Interactive 3D Mesh Engine</p>
+    <!-- 3D THEATRE STAGE -->
+    <div id="theatre-3d-overlay">
+        <!-- Status Indicator -->
+        <div id="loader-status" class="absolute text-sm font-bold tracking-widest text-amber-600 animate-pulse uppercase">
+            Transforming Card into 3D Mesh...
         </div>
 
-        <!-- 3D Viewport -->
-        <div id="canvas-3d-viewport" class="cursor-grab active:cursor-grabbing"></div>
-
-        <div class="mt-4 text-center">
-            <p class="text-[10px] text-neutral-400 uppercase tracking-widest mb-6">Drag to rotate • Scroll to zoom 3D object</p>
-            <button onclick="closeLuxury3D()" class="px-8 py-3 bg-neutral-900 text-white font-light text-xs tracking-[0.3em] uppercase rounded-full hover:bg-amber-600 transition-all duration-300 shadow-xl">
-                Close Experience ×
-            </button>
+        <div class="text-center mb-2 pointer-events-none z-10">
+            <h2 class="brand-title text-2xl md:text-3xl font-bold tracking-widest text-neutral-900">INTERACTIVE 3D VIEW</h2>
+            <p class="text-[9px] text-amber-600 font-bold mt-1 tracking-[0.4em] uppercase">Use Mouse/Touch to Flip and Rotate the actual card</p>
         </div>
+
+        <!-- This container holds the exact replicated 3D Object -->
+        <div id="canvas-3d-holder" class="cursor-grab active:cursor-grabbing"></div>
+
+        <button onclick="closeTheatre3D()" class="mt-4 px-8 py-3 bg-neutral-900 hover:bg-amber-600 text-white text-[10px] tracking-[0.3em] font-bold uppercase rounded-full shadow-lg transition-all duration-300">
+            ← Back to Showroom
+        </button>
     </div>
 
-    <!-- MAIN WEB INTERFACE -->
+    <!-- MAIN INTERFACE -->
     <div class="min-h-screen p-4 md:p-12 flex flex-col justify-between">
         
-        <!-- Luxury Floating Navbar -->
-        <header class="w-full max-w-7xl mx-auto glass-showroom-card rounded-full px-8 py-5 flex flex-col md:flex-row justify-between items-center z-10">
+        <!-- Clean Luxury Header -->
+        <header class="w-full max-w-7xl mx-auto luxury-item-card rounded-[2rem] px-8 py-6 flex flex-col md:flex-row justify-between items-center">
             <div class="text-center md:text-left">
-                <span class="text-[9px] tracking-[0.5em] text-amber-600 font-bold uppercase block mb-1">The Haute Couture Showroom</span>
-                <h1 class="luxury-title text-2xl md:text-4xl font-bold tracking-wider text-neutral-900">KANGAN FANCY STORE</h1>
-                <p class="text-[9px] tracking-[0.3em] text-neutral-400 uppercase mt-0.5">Siraha, Nepal</p>
+                <span class="text-[9px] tracking-[0.6em] text-amber-600 font-bold uppercase block mb-1">Exclusive Digital Boutique</span>
+                <h1 class="brand-title text-3xl md:text-4xl font-extrabold tracking-wide text-neutral-950">KANGAN FANCY STORE</h1>
+                <p class="text-[9px] tracking-[0.3em] text-slate-400 uppercase mt-1">Siraha, Nepal</p>
             </div>
             
-            <!-- Quick Integrated Payment Badges -->
-            <div class="flex gap-3 mt-4 md:mt-0 text-[9px] tracking-widest uppercase font-semibold">
-                <div class="px-4 py-2 rounded-full bg-white/80 border border-emerald-200 text-emerald-600 shadow-sm">eSewa Direct</div>
-                <div class="px-4 py-2 rounded-full bg-white/80 border border-purple-200 text-purple-600 shadow-sm">Khalti Pay</div>
-                <div class="px-4 py-2 rounded-full bg-white/80 border border-neutral-200 text-neutral-600 shadow-sm">C.O.D</div>
+            <div class="flex gap-2.5 mt-4 md:mt-0 text-[9px] font-bold tracking-widest uppercase">
+                <span class="px-4 py-2 rounded-full bg-white text-emerald-600 border border-slate-100 shadow-sm">eSewa</span>
+                <span class="px-4 py-2 rounded-full bg-white text-purple-600 border border-slate-100 shadow-sm">Khalti</span>
+                <span class="px-4 py-2 rounded-full bg-white text-amber-700 border border-slate-100 shadow-sm">COD Available</span>
             </div>
         </header>
 
-        <!-- Subtitle Concept statement -->
-        <div class="text-center my-12">
-            <h3 class="luxury-title text-lg md:text-xl font-light tracking-[0.2em] text-neutral-500">
-                Tap any product card to transform its reality into <span class="text-amber-600 font-normal">Fluid 3D Space</span>
-            </h3>
-            <div class="w-12 h-[1px] bg-amber-500/50 mx-auto mt-4"></div>
+        <div class="text-center my-10">
+            <p class="text-[11px] font-bold tracking-[0.25em] text-slate-400 uppercase">
+                ✨ Click directly on any card to project that specific card into real 3D space ✨
+            </p>
         </div>
 
-        <!-- Luxury Inventory Grid (20 Fully Responsive Items) -->
-        <main class="w-full max-w-7xl mx-auto mb-16">
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6" id="product-grid">
-                
-                <!-- Script auto-generates 20 high-fidelity item structures cleanly -->
-
+        <!-- 20 Complete Retail Inventory Grid -->
+        <main class="w-full max-w-7xl mx-auto mb-12">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6" id="showroom-grid">
+                <!-- Cards will be generated with clear IDs for perfect cloning -->
             </div>
         </main>
 
-        <!-- Minimal High-End Footer -->
-        <footer class="w-full text-center py-6 border-t border-neutral-200/50 max-w-7xl mx-auto">
-            <p class="text-[10px] text-neutral-400 tracking-[0.2em] uppercase">&copy; 2026 Kangan Fancy Store. Designed for Next-Generation Digital Retail.</p>
+        <footer class="w-full text-center py-6 border-t border-slate-200/50 max-w-7xl mx-auto text-[9px] text-slate-400 tracking-[0.2em] uppercase">
+            &copy; 2026 Kangan Fancy Store • Premium Advanced Morph Engine.
         </footer>
-
     </div>
 
-    <!-- ADVANCED STUDIO 3D ENGINE SCRIPT -->
     <script>
-        // High-fidelity curated list of all 20 store items
-        const storeInventory = [
-            { name: "Velvet Bangles", type: "Jewelry", emoji: "💫", price: "1,200", color: 0xD4AF37, shape: "torus" },
-            { name: "Bridal Chura", type: "Jewelry", emoji: "👑", price: "4,500", color: 0xE0115F, shape: "cylinder" },
-            { name: "Gold Jhumkas", type: "Jewelry", emoji: "✨", price: "2,400", color: 0xFFD700, shape: "cone" },
-            { name: "Matte Lipstick", type: "Cosmetics", emoji: "💄", price: "850", color: 0xDC2626, shape: "cylinder" },
-            { name: "HD Foundation", type: "Cosmetics", emoji: "🧪", price: "1,650", color: 0xD97706, shape: "box" },
-            { name: "Bridal Makeup Kit", type: "Cosmetics", emoji: "💼", price: "8,500", color: 0x9333EA, shape: "box" },
-            { name: "Henna Cones", type: "Cosmetics", emoji: "🌿", price: "150", color: 0x16A34A, shape: "cone" },
-            { name: "Fancy Hair Clips", type: "Accessories", emoji: "🎀", price: "350", color: 0x06B6D4, shape: "torusKnot" },
-            { name: "Gold Rani Haar", type: "Jewelry", emoji: "📿", price: "12,500", color: 0xB45309, shape: "torus" },
-            { name: "Bridal Payal", type: "Jewelry", emoji: "🔔", price: "1,800", color: 0x64748B, shape: "cylinder" },
-            { name: "Nail Polish Pack", type: "Cosmetics", emoji: "💅", price: "950", color: 0xEC4899, shape: "cylinder" },
-            { name: "Eyeshadow Palette", type: "Cosmetics", emoji: "👁️", price: "2,200", color: 0x4F46E5, shape: "box" },
-            { name: "Maang Tikka", type: "Jewelry", emoji: "👑", price: "1,450", color: 0xF59E0B, shape: "cone" },
-            { name: "Waterproof Kajal", type: "Cosmetics", emoji: "✏️", price: "450", color: 0x171717, shape: "cylinder" },
-            { name: "Luxury Perfume", type: "Cosmetics", emoji: "🔮", price: "3,800", color: 0x0D9488, shape: "sphere" },
-            { name: "Fancy Kada Sets", type: "Jewelry", emoji: "💫", price: "1,600", color: 0xDB2777, shape: "torus" },
-            { name: "Hair Brooch Juda", type: "Accessories", emoji: "🔱", price: "750", color: 0x4B5563, shape: "torusKnot" },
-            { name: "Skin Glow Serum", type: "Cosmetics", emoji: "✨", price: "1,400", color: 0xEA580C, shape: "sphere" },
-            { name: "Traditional Nath", type: "Jewelry", emoji: "⭕", price: "1,100", color: 0xC2410C, shape: "torus" },
-            { name: "Premium Compact", type: "Cosmetics", emoji: "🪞", price: "800", color: 0x78716C, shape: "cylinder" }
+        // Full Inventory Dataset
+        const inventory = [
+            { id: "item-1", name: "Velvet Bangles", cat: "Jewelry", emoji: "💫", price: "1,200" },
+            { id: "item-2", name: "Bridal Chura", cat: "Jewelry", emoji: "👑", price: "4,500" },
+            { id: "item-3", name: "Gold Jhumkas", cat: "Jewelry", emoji: "✨", price: "2,400" },
+            { id: "item-4", name: "Matte Lipstick", cat: "Cosmetics", emoji: "💄", price: "850" },
+            { id: "item-5", name: "HD Foundation", cat: "Cosmetics", emoji: "🧪", price: "1,650" },
+            { id: "item-6", name: "Makeup Kit", cat: "Cosmetics", emoji: "💼", price: "8,500" },
+            { id: "item-7", name: "Henna Cones", cat: "Cosmetics", emoji: "🌿", price: "150" },
+            { id: "item-8", name: "Fancy Hair Clips", cat: "Accessories", emoji: "🎀", price: "350" },
+            { id: "item-9", name: "Gold Rani Haar", cat: "Jewelry", emoji: "📿", price: "12,500" },
+            { id: "item-10", name: "Bridal Payal", cat: "Jewelry", emoji: "🔔", price: "1,800" },
+            { id: "item-11", name: "Nail Polish Pack", cat: "Cosmetics", emoji: "💅", price: "950" },
+            { id: "item-12", name: "Eyeshadow Palette", cat: "Cosmetics", emoji: "👁️", price: "2,200" },
+            { id: "item-13", name: "Maang Tikka", cat: "Jewelry", emoji: "👑", price: "1,450" },
+            { id: "item-14", name: "Waterproof Kajal", cat: "Cosmetics", emoji: "✏️", price: "450" },
+            { id: "item-15", name: "Luxury Perfume", cat: "Cosmetics", emoji: "🔮", price: "3,800" },
+            { id: "item-16", name: "Fancy Kada Sets", cat: "Jewelry", emoji: "💫", price: "1,600" },
+            { id: "item-17", name: "Hair Brooch Juda", cat: "Accessories", emoji: "🔱", price: "750" },
+            { id: "item-18", name: "Skin Glow Serum", cat: "Cosmetics", emoji: "✨", price: "1,400" },
+            { id: "item-19", name: "Traditional Nath", cat: "Jewelry", emoji: "⭕", price: "1,100" },
+            { id: "item-20", name: "Premium Compact", cat: "Cosmetics", emoji: "🪞", price: "800" }
         ];
 
-        // Dynamically build the grid inject
-        const grid = document.getElementById('product-grid');
-        storeInventory.forEach((item, index) => {
+        // Injecting HTML Cards dynamically
+        const grid = document.getElementById('showroom-grid');
+        inventory.forEach(product => {
             grid.innerHTML += `
-                <div class="glass-showroom-card rounded-[2rem] p-6 flex flex-col justify-between h-72 cursor-pointer" 
-                     onclick="launchMorph3D('${item.name}', '${item.type}', ${item.color}, '${item.shape}')">
-                    <div class="w-full h-36 bg-white/50 rounded-2xl flex items-center justify-center text-5xl shadow-sm border border-white/40 mb-3 relative overflow-hidden group">
-                        <div class="absolute inset-0 bg-gradient-to-tr from-amber-100/10 to-transparent transition-opacity duration-500 opacity-0 group-hover:opacity-100"></div>
-                        <span class="transform transition-transform duration-500 group-hover:scale-125">${item.emoji}</span>
+                <div id="${product.id}" class="luxury-item-card rounded-[2rem] p-5 flex flex-col justify-between h-72 cursor-pointer" onclick="transformThisCardTo3D('${product.id}')">
+                    <div class="w-full h-36 bg-white/70 rounded-2xl flex items-center justify-center text-5xl shadow-inner border border-slate-100 mb-3">
+                        <span>${product.emoji}</span>
                     </div>
                     <div>
-                        <span class="text-[9px] tracking-widest text-neutral-400 uppercase font-semibold">${item.type}</span>
-                        <h4 class="font-bold text-sm text-neutral-800 tracking-wide mt-0.5">${item.name}</h4>
+                        <span class="text-[9px] tracking-widest text-slate-400 font-bold uppercase">${product.cat}</span>
+                        <h4 class="font-bold text-sm text-slate-800 tracking-wide mt-0.5">${product.name}</h4>
                     </div>
-                    <div class="flex justify-between items-center mt-3 pt-3 border-t border-neutral-200/40">
-                        <span class="text-xs font-semibold text-neutral-900">Rs. ${item.price}</span>
-                        <span class="text-[8px] text-amber-600 font-bold tracking-widest uppercase bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200/50">View 3D</span>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100">
+                        <span class="text-xs font-bold text-slate-900">Rs. ${product.price}</span>
+                        <span class="text-[8px] text-amber-600 font-bold tracking-widest uppercase bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">Morph 3D</span>
                     </div>
                 </div>
             `;
         });
 
-        // THREE.JS SYSTEM
-        let scene, camera, renderer, crystalMesh;
+        // THREE.JS REAL-TIME TEXTURING MOTOR
+        let scene, camera, renderer, clonedCardMesh;
         let isDragging = false;
-        let previousMouse = { x: 0, y: 0 };
-        const stage = document.getElementById('luxury-3d-stage');
-        const viewport = document.getElementById('canvas-3d-viewport');
+        let prevMouse = { x: 0, y: 0 };
+        const overlay = document.getElementById('theatre-3d-overlay');
+        const holder = document.getElementById('canvas-3d-holder');
+        const loader = document.getElementById('loader-status');
 
-        function setup3DSpace() {
+        function initTheatre() {
             scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(45, viewport.clientWidth / viewport.clientHeight, 0.1, 100);
-            camera.position.z = 6;
+            camera = new THREE.PerspectiveCamera(40, holder.clientWidth / holder.clientHeight, 0.1, 100);
+            camera.position.z = 5.5;
 
             renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setSize(viewport.clientWidth, viewport.clientHeight);
+            renderer.setSize(holder.clientWidth, holder.clientHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            viewport.appendChild(renderer.domElement);
+            holder.appendChild(renderer.domElement);
 
-            // Studio Soft Lighting Matrix
+            // Studio High Fidelity Lights
             const ambient = new THREE.AmbientLight(0xffffff, 0.9);
             scene.add(ambient);
-
-            const pointLight1 = new THREE.PointLight(0xffffff, 1);
-            pointLight1.position.set(5, 5, 5);
-            scene.add(pointLight1);
-
-            const pointLight2 = new THREE.PointLight(0xd4af37, 0.5); // Subtle gold bounce reflection
-            pointLight2.position.set(-5, -5, 3);
-            scene.add(pointLight2);
+            const light1 = new THREE.DirectionalLight(0xffffff, 0.8);
+            light1.position.set(2, 4, 5);
+            scene.add(light1);
         }
 
-        function launchMorph3D(name, type, colorHex, shape) {
-            document.getElementById('modal-product-title').innerText = name;
-            document.getElementById('modal-product-desc').innerText = "Interactive 3D " + type;
-            
-            stage.classList.add('active');
+        // CRAZY FEATURE: Converts the exact HTML element clicked into a 3D Texture live!
+        function transformThisCardTo3D(cardId) {
+            overlay.classList.add('active');
+            loader.classList.add('active');
 
-            if (!scene) setup3DSpace();
-            if (crystalMesh) scene.remove(crystalMesh);
+            if (!scene) initTheatre();
+            if (clonedCardMesh) scene.remove(clonedCardMesh);
 
-            // Creative Dynamic Geometry Choice based on product nature
-            let geometry;
-            if (shape === 'torus') geometry = new THREE.TorusGeometry(1, 0.3, 16, 100);
-            else if (shape === 'cylinder') geometry = new THREE.CylinderGeometry(0.8, 0.8, 1.8, 32);
-            else if (shape === 'cone') geometry = new THREE.ConeGeometry(1, 1.8, 32);
-            else if (shape === 'sphere') geometry = new THREE.SphereGeometry(1.2, 32, 32);
-            else if (shape === 'torusKnot') geometry = new THREE.TorusKnotGeometry(0.7, 0.25, 100, 16);
-            else geometry = new THREE.BoxGeometry(1.4, 1.8, 1.4); // fallback box
+            const targetElement = document.getElementById(cardId);
 
-            // High-End Crystal Refraction/Glass look material
-            const material = new THREE.MeshPhysicalMaterial({
-                color: colorHex,
-                metalness: 0.1,
-                roughness: 0.1,
-                transparent: true,
-                opacity: 0.85,
-                transmission: 0.6, // Gives glasslike fluid pass-through
-                side: THREE.DoubleSide,
-                clearcoat: 1.0,
-                clearcoatRoughness: 0.1
+            // Capture the exact layout, colors, text, and emojis of the clicked card
+            html2canvas(targetElement, { backgroundColor: '#ffffff', scale: 2 }).then(canvas => {
+                loader.classList.remove('active');
+
+                const texture = new THREE.CanvasTexture(canvas);
+                
+                // Front Side: Exact Replica Image
+                const frontMat = new THREE.MeshStandardMaterial({ map: texture, roughness: 0.2, metalness: 0.1 });
+                // Back Side: Luxury Gold Metallic finish
+                const backMat = new THREE.MeshStandardMaterial({ color: 0xD4AF37, metalness: 0.8, roughness: 0.2 });
+                // Side Edges
+                const sideMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
+
+                // Multi-material setup for realistic 3D board
+                const materials = [sideMat, sideMat, sideMat, sideMat, frontMat, backMat];
+
+                // Box geometry matches the card aspect ratio perfectly
+                const geometry = new THREE.BoxGeometry(2.2, 3.1, 0.08);
+                clonedCardMesh = new THREE.Mesh(geometry, materials);
+                
+                scene.add(clonedCardMesh);
+
+                // Luxury entry pop bounce
+                clonedCardMesh.scale.set(0, 0, 0);
+                clonedCardMesh.rotation.set(0.2, 0.5, 0);
+                gsap.to(clonedCardMesh.scale, { x: 1.2, y: 1.2, z: 1.2, duration: 0.8, ease: "back.out(1.5)" });
             });
-
-            crystalMesh = new THREE.Mesh(geometry, material);
-            scene.add(crystalMesh);
-
-            // GSAP Hypnotic Morph Entry Animation
-            crystalMesh.scale.set(0, 0, 0);
-            crystalMesh.rotation.set(2, 4, 1);
-            
-            gsap.to(crystalMesh.scale, { x: 1.3, y: 1.3, z: 1.3, duration: 1, ease: "elastic.out(1, 0.75)" });
-            gsap.to(crystalMesh.rotation, { x: 0, y: 0, z: 0, duration: 1.4, ease: "power4.out" });
         }
 
-        function closeLuxury3D() {
-            stage.classList.remove('active');
+        function closeTheatre3D() {
+            overlay.classList.remove('active');
         }
 
-        // Kinetic Render loop with Auto-Float
+        // Render Loop with floating effect
         const clock = new THREE.Clock();
-        function renderLoop() {
-            requestAnimationFrame(renderLoop);
-            if (crystalMesh && !isDragging) {
-                const time = clock.getElapsedTime();
-                crystalMesh.rotation.y = time * 0.4;
-                crystalMesh.rotation.x = Math.sin(time * 0.5) * 0.2;
-                crystalMesh.position.y = Math.sin(time * 1.5) * 0.12; // Natural Floating physics
+        function runEngine() {
+            requestAnimationFrame(runEngine);
+            if (clonedCardMesh && !isDragging) {
+                const elapsed = clock.getElapsedTime();
+                clonedCardMesh.rotation.y = Math.sin(elapsed * 0.5) * 0.4; // Auto premium wave sway
+                clonedCardMesh.position.y = Math.sin(elapsed * 1.5) * 0.1;
             }
             if (scene) renderer.render(scene, camera);
         }
-        renderLoop();
+        runEngine();
 
-        // High precision Mouse/Drag mechanics
-        viewport.addEventListener('mousedown', () => isDragging = true);
+        // Drag Controls
+        holder.addEventListener('mousedown', () => isDragging = true);
         window.addEventListener('mouseup', () => isDragging = false);
-        viewport.addEventListener('mousemove', (e) => {
-            if (isDragging && crystalMesh) {
-                crystalMesh.rotation.y += (e.clientX - previousMouse.x) * 0.01;
-                crystalMesh.rotation.x += (e.clientY - previousMouse.y) * 0.01;
+        holder.addEventListener('mousemove', (e) => {
+            if (isDragging && clonedCardMesh) {
+                clonedCardMesh.rotation.y += (e.clientX - prevMouse.x) * 0.01;
+                clonedCardMesh.rotation.x += (e.clientY - prevMouse.y) * 0.01;
             }
-            previousMouse = { x: e.clientX, y: e.clientY };
+            prevMouse = { x: e.clientX, y: e.clientY };
         });
 
-        // Mobile responsive touch tracks
-        viewport.addEventListener('touchstart', (e) => { isDragging = true; previousMouse = { x: e.touches[0].clientX, y: e.touches[0].clientY }; });
+        // Mobile Touch Tracks
+        holder.addEventListener('touchstart', (e) => { isDragging = true; prevMouse = { x: e.touches[0].clientX, y: e.touches[0].clientY }; });
         window.addEventListener('touchend', () => isDragging = false);
-        viewport.addEventListener('touchmove', (e) => {
-            if (isDragging && crystalMesh) {
-                crystalMesh.rotation.y += (e.touches[0].clientX - previousMouse.x) * 0.01;
-                crystalMesh.rotation.x += (e.touches[0].clientY - previousMouse.y) * 0.01;
+        holder.addEventListener('touchmove', (e) => {
+            if (isDragging && clonedCardMesh) {
+                clonedCardMesh.rotation.y += (e.touches[0].clientX - prevMouse.x) * 0.01;
+                clonedCardMesh.rotation.x += (e.touches[0].clientY - prevMouse.y) * 0.01;
             }
-            previousMouse = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            prevMouse = { x: e.touches[0].clientX, y: e.touches[0].clientY };
         });
 
-        // Resizer Engine 
+        // Auto Window Resize Fix
         window.addEventListener('resize', () => {
             if (camera && renderer) {
-                camera.aspect = viewport.clientWidth / viewport.clientHeight;
+                camera.aspect = holder.clientWidth / holder.clientHeight;
                 camera.updateProjectionMatrix();
-                renderer.setSize(viewport.clientWidth, viewport.clientHeight);
+                renderer.setSize(holder.clientWidth, holder.clientHeight);
             }
         });
     </script>
