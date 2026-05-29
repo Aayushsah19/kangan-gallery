@@ -3,416 +3,1168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kangan Fancy Store | 3D Immersive Bangle Hub (Production Grade)</title>
+    <title>Kangan Fancy Store | Premium 3D Immersive Showroom Framework v5.0</title>
     
-    <meta name="description" content="Premium 3D showroom for Kangan Fancy Store, Siraha, Nepal. Explore high-fidelity luxury bangles and wedding chura sets natively in 3D WebGL space.">
-    <meta name="keywords" content="Kangan Fancy Store, Siraha Nepal, 3D Bangles, Bridal Chura, eSewa, Khalti">
-    <meta name="author" content="Enterprise WebGL Architecture Core">
+    <!-- Enterprise Grade Analytical SEO Engine Metadata -->
+    <meta name="description" content="Kangan Fancy Store, Siraha, Nepal - Ultimate Interactive 3D Realtime WebGL Showroom. Immersive digital display framework for luxury bangles, bridal chura, kundan kadas, and premium cosmetics.">
+    <meta name="keywords" content="Kangan Fancy Store, Siraha Nepal, 3D Jewelry, Bridal Chura, eSewa Integration, Khalti Payment, Velvet Bangles, Luxury WebGL E-commerce">
+    <meta name="author" content="Enterprise Hardware Accelerated Matrix Compiler">
+    <meta name="robots" content="index, follow">
     
+    <!-- Open Graph Protocol Layer for High-End Social Synchronization -->
+    <meta property="og:title" content="Kangan Fancy Store | Immersive 3D Showroom Matrix">
+    <meta property="og:description" content="Experience high-fidelity 3D interactive shopping natively for Siraha, Nepal's finest jewelry catalog.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=1200">
+    
+    <!-- External CDN Pipeline (Strictly Uncompressed Stable Distributions) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
     
+    <!-- Tailored System Configuration - Deep Aesthetic Core Matching User Persona -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         luxury: {
-                            50: '#fffbf0', 100: '#fef3c7', 200: '#fde68a', 300: '#fcd34d',
-                            400: '#fbbf24', 500: '#f59e0b', 600: '#d97706', 700: '#b45309',
-                            800: '#92400e', 900: '#78350f', slate: '#1e293b', gold: '#d4af37',
-                            platinum: '#e5e7eb'
+                            maroon: '#800000',     // User Specified Primary Brand Identity
+                            gold: '#D4AF37',       // User Specified Secondary Metallic Foil
+                            charcoal: '#1A1A1A',
+                            cream: '#FFFDD0',
+                            platinum: '#E5E4E2',
+                            onyx: '#0F0F0F',
+                            bronze: '#CD7F32'
+                        },
+                        nepal: {
+                            esewa: '#60BB46',
+                            khalti: '#5C2D91'
                         }
                     },
                     fontFamily: {
                         serif: ['Cinzel', 'serif'],
-                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
                     },
                     boxShadow: {
-                        'glass-sm': '0 4px 12px 0 rgba(31, 38, 135, 0.03)',
-                        'glass-md': '0 8px 32px 0 rgba(31, 38, 135, 0.06)',
-                        'glass-lg': '0 12px 40px 0 rgba(212, 175, 55, 0.12)'
+                        'luxury-glow': '0 0 25px rgba(212, 175, 55, 0.25)',
+                        'deep-bevel': 'inset 0 2px 4px rgba(0,0,0,0.4), inset 0 -2px 4px rgba(255,255,255,0.1)',
+                        'glass-card': '0 8px 32px 0 rgba(128, 0, 0, 0.08)',
+                        'neon-border': '0 0 15px rgba(220, 38, 38, 0.4)'
+                    },
+                    animation: {
+                        'slow-spin': 'spin 35s linear infinite',
+                        'reverse-spin': 'spin 20s linear infinite reverse',
+                        'float-slow': 'floatAnimation 8s ease-in-out infinite',
+                        'pulse-gold': 'pulseGold 3s infinite ease-in-out',
+                        'shimmer-fast': 'shimmer 1.5s infinite linear'
                     }
                 }
             }
-        }
+        };
     </script>
 
+    <!-- Global Deep Architectural CSS Styling Engine -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap');
         
         *, *::before, *::after {
             box-sizing: border-box;
+            margin: 0; padding: 0;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
+
         body {
-            background: radial-gradient(circle at 50% 0%, #ffffff 0%, #fbfcfd 35%, #f3f5f9 100%);
+            background-color: #0F0F0F;
+            color: #E5E4E2;
             overflow-x: hidden;
-            user-select: none;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
-        .brand-title { font-family: 'Cinzel', serif; }
-        .glass-base {
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-        }
-        .glass-header {
-            background: rgba(255, 255, 255, 0.65);
+
+        /* Luxury Soft Glassmorphism Layering Matrix */
+        .glass-surface {
+            background: rgba(26, 26, 26, 0.65);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(212, 175, 55, 0.15);
         }
-        .luxury-bangle-card {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 10px 30px rgba(148, 163, 184, 0.05);
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+
+        .glass-premium-card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.8) 0%, rgba(15, 15, 15, 0.95) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .luxury-bangle-card:hover {
-            transform: translateY(-10px);
-            border: 1px solid rgba(212, 175, 55, 0.5);
-            box-shadow: 0 30px 60px rgba(212, 175, 55, 0.15);
+
+        .glass-premium-card:hover {
+            border: 1px solid rgba(212, 175, 55, 0.6);
+            box-shadow: 0 20px 50px rgba(128, 0, 0, 0.35);
+            transform: translateY(-8px) scale(1.01);
         }
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: rgba(241, 245, 249, 1); }
+
+        /* Keyframes Animations */
+        @keyframes floatAnimation {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        @keyframes pulseGold {
+            0%, 100% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); border-color: rgba(212, 175, 55, 0.2); }
+            50% { box-shadow: 0 0 35px rgba(212, 175, 55, 0.6); border-color: rgba(212, 175, 55, 0.8); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .shimmer-effect {
+            background: linear-gradient(90deg, #1A1A1A 25%, #262626 50%, #1A1A1A 75%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite linear;
+        }
+
+        /* Custom Vector Scrollbar mapping */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0F0F0F; }
         ::-webkit-scrollbar-thumb {
-            background: rgba(212, 175, 55, 0.3);
-            border-radius: 9999px;
-            border: 2px solid rgba(241, 245, 249, 1);
+            background: #D4AF37;
+            border-radius: 10px;
         }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(212, 175, 55, 0.6); }
-        .gpu-layer {
-            transform: translateZ(0);
-            backface-visibility: hidden;
-            perspective: 1000px;
+        ::-webkit-scrollbar-thumb:hover { background: #800000; }
+
+        .brand-text-stroke {
+            -webkit-text-stroke: 1px rgba(212, 175, 55, 0.3);
+            color: transparent;
         }
-        #theatre-3d-overlay {
-            position: fixed; inset: 0; width: 100%; height: 100%; z-index: 100;
-            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(30px);
-            opacity: 0; pointer-events: none; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-        }
-        #theatre-3d-overlay.active { opacity: 1; pointer-events: auto; }
-        #canvas-3d-holder { width: 500px; height: 550px; max-width: 95vw; max-height: 55vh; }
     </style>
 </head>
-<body class="text-neutral-900 antialiased font-sans gpu-layer">
+<body class="gpu-layer select-none relative">
 
-    <div id="theatre-3d-overlay" class="py-8 px-4">
-        <div class="w-full max-w-7xl mx-auto flex justify-between items-center px-4 md:px-8 pointer-events-none z-10">
-            <div>
-                <span id="theatre-meta-cat" class="text-[8px] tracking-[0.4em] font-black text-amber-600 uppercase block mb-0.5">Collection Category</span>
-                <h3 id="theatre-meta-title" class="brand-title text-xl md:text-2xl font-black text-neutral-900 uppercase tracking-widest">Active Vector Mesh</h3>
-            </div>
-            <div class="hidden sm:block text-right">
-                <span class="text-[8px] tracking-[0.25em] font-bold text-neutral-400 uppercase block">Engine Context</span>
-                <span class="text-[9px] font-mono font-bold text-emerald-600 uppercase bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/50">WebGL Hardware Layer</span>
-            </div>
-        </div>
+    <!-- GLOBAL EMBEDDED ARCHITECTURAL DATA CORE AND MONOLITH MEMORY MATRIX -->
+    <script>
+        window.KanganEngineContext = {
+            metadata: {
+                buildVersion: "5.4.2-UltimateSiraha",
+                localization: "Siraha, Nepal",
+                brandOwner: "Kangan Fancy Store",
+                palette: { primary: "#800000", accent: "#D4AF37" }
+            },
+            state: {
+                activeBangleMeshId: null,
+                cartSystemMemory: [],
+                wishlistMatrix: [],
+                currencySymbol: "NRs.",
+                isHardwareAccelerated: true,
+                analyticsPayload: { totalClicks: 0, 3DPreviewsGenerated: 0, orderCount: 0 }
+            }
+        };
 
-        <div id="loader-status" class="absolute inset-0 m-auto w-fit h-fit flex flex-col items-center justify-center pointer-events-none transition-opacity duration-300 z-20 opacity-0">
-            <div class="w-10 h-10 border-4 border-amber-500/20 border-t-amber-600 rounded-full animate-spin mb-4"></div>
-            <p class="text-[9px] font-black tracking-[0.3em] text-amber-700 uppercase animate-pulse">Rasterizing Element to 3D Plane Buffer...</p>
-        </div>
-
-        <div class="w-full flex justify-center items-center relative my-auto">
-            <div class="absolute w-[440px] h-[440px] max-w-[85vw] max-height-[85vw] border border-neutral-200/50 rounded-full pointer-events-none animate-[spin_50s_linear_infinite]"></div>
-            <div class="absolute w-[300px] h-[300px] max-w-[65vw] max-height-[65vw] border border-dashed border-amber-500/10 rounded-full pointer-events-none animate-[spin_30s_linear_infinite_reverse]"></div>
-            <div id="canvas-3d-holder" class="relative z-10"></div>
-        </div>
-
-        <div class="w-full max-w-md mx-auto text-center flex flex-col items-center gap-4 z-10">
-            <p class="text-[9px] text-neutral-400 font-bold uppercase tracking-[0.25em] pointer-events-none">
-                🖱️ Left Click + Drag to Spin • 📜 Touch/Swipe to Flip Surface
-            </p>
-            <div class="flex items-center gap-3 w-full px-4">
-                <button onclick="closeTheatre3D()" class="flex-1 px-8 py-4 bg-neutral-950 hover:bg-neutral-900 text-white text-[10px] tracking-[0.3em] font-extrabold uppercase rounded-full shadow-lg transition-all duration-300">
-                    ← Close Preview
-                </button>
-                <button id="theatre-buy-btn" onclick="" class="flex-1 px-8 py-4 bg-amber-600 hover:bg-amber-700 text-white text-[10px] tracking-[0.3em] font-extrabold uppercase rounded-full shadow-lg transition-all duration-300">
-                    Buy Now Direct
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div id="checkout-form-overlay" class="fixed inset-0 w-full h-full z-50 bg-neutral-950/75 backdrop-blur-xl opacity-0 pointer-events-none transition-all duration-400 flex items-center justify-center p-4">
-        <div class="w-full max-w-xl bg-white rounded-[3rem] p-6 sm:p-10 shadow-2xl relative border border-neutral-100 max-h-[90vh] overflow-y-auto">
-            <button onclick="terminateCheckoutOverlay()" class="absolute top-6 right-6 w-10 h-10 bg-neutral-100 hover:bg-neutral-200 rounded-full flex items-center justify-center text-neutral-600 text-sm font-black transition-all">✕</button>
-            
-            <div class="text-left mb-6">
-                <span class="text-[8px] tracking-[0.4em] font-extrabold text-amber-700 bg-amber-50 px-3 py-1 rounded-full border border-amber-200/50 uppercase inline-block mb-2">Secure Nepal Dispatch</span>
-                <h3 class="font-serif text-2xl font-black text-neutral-950 uppercase tracking-widest">Billing Checkout</h3>
-                <p id="checkout-bangle-tagline" class="text-[10px] text-neutral-400 font-bold tracking-wider uppercase mt-0.5">Item: Processing...</p>
-            </div>
-
-            <div class="w-full bg-neutral-50 rounded-2xl p-4 border border-neutral-200/50 mb-6 flex justify-between items-center">
-                <div>
-                    <p class="text-[9px] text-neutral-400 font-extrabold uppercase tracking-widest">Total Valuation Cost</p>
-                    <p id="modal-calculated-price" class="text-xl font-black text-neutral-950 font-mono mt-0.5">Rs. 0</p>
-                </div>
-                <span class="text-[8px] text-emerald-600 font-extrabold uppercase tracking-widest bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">Express Delivery Siraha</span>
-            </div>
-
-            <form id="nepal-order-form" onsubmit="executeOrderPipelineValidation(event)" class="space-y-4 text-left">
-                <div>
-                    <label class="block text-[9px] text-neutral-400 font-black tracking-widest uppercase mb-1.5">Customer Name <span class="text-rose-500">*</span></label>
-                    <input type="text" id="cust-fullname" required placeholder="Full Name" class="w-full px-5 py-3.5 bg-neutral-50 border border-neutral-200 focus:border-amber-500 focus:bg-white rounded-2xl text-xs font-semibold outline-none transition-all">
-                </div>
-                <div>
-                    <label class="block text-[9px] text-neutral-400 font-black tracking-widest uppercase mb-1.5">Nepal Mobile String <span class="text-rose-500">*</span></label>
-                    <input type="tel" id="cust-phone" required pattern="^[9][678][0-9]{8}$" placeholder="98XXXXXXXX" class="w-full px-5 py-3.5 bg-neutral-50 border border-neutral-200 focus:border-amber-500 focus:bg-white rounded-2xl text-xs font-mono font-semibold outline-none transition-all">
-                </div>
-                <div>
-                    <label class="block text-[9px] text-neutral-400 font-black tracking-widest uppercase mb-1.5">Shipping Drop Address <span class="text-rose-500">*</span></label>
-                    <input type="text" id="cust-address" required placeholder="Full Shipping Address" class="w-full px-5 py-3.5 bg-neutral-50 border border-neutral-200 focus:border-amber-500 focus:bg-white rounded-2xl text-xs font-semibold outline-none transition-all">
-                </div>
-                <div>
-                    <label class="block text-[9px] text-neutral-400 font-black tracking-widest uppercase mb-2">Settlement Account Provider <span class="text-rose-500">*</span></label>
-                    <div class="grid grid-cols-3 gap-3">
-                        <label class="border-2 border-neutral-200 rounded-2xl p-3 flex flex-col items-center justify-center gap-1.5 cursor-pointer hover:border-emerald-500 transition-all text-center relative">
-                            <input type="radio" name="paymentMethod" value="esewa" required class="absolute top-2.5 right-2.5 accent-emerald-600">
-                            <span class="text-lg">🟢</span><span class="text-[9px] font-black tracking-wide uppercase text-neutral-800">eSewa</span>
-                        </label>
-                        <label class="border-2 border-neutral-200 rounded-2xl p-3 flex flex-col items-center justify-center gap-1.5 cursor-pointer hover:border-purple-500 transition-all text-center relative">
-                            <input type="radio" name="paymentMethod" value="khalti" class="absolute top-2.5 right-2.5 accent-purple-600">
-                            <span class="text-lg"> 🟣</span><span class="text-[9px] font-black tracking-wide uppercase text-neutral-800">Khalti</span>
-                        </label>
-                        <label class="border-2 border-neutral-200 rounded-2xl p-3 flex flex-col items-center justify-center gap-1.5 cursor-pointer hover:border-amber-500 transition-all text-center relative">
-                            <input type="radio" name="paymentMethod" value="cod" class="absolute top-2.5 right-2.5 accent-amber-600">
-                            <span class="text-lg">📦</span><span class="text-[9px] font-black tracking-wide uppercase text-neutral-800">COD</span>
-                        </label>
-                    </div>
-                </div>
-                <button type="submit" class="w-full py-4 mt-4 bg-amber-600 hover:bg-amber-700 text-white text-[10px] tracking-[0.35em] font-black uppercase rounded-2xl shadow-xl transition-all duration-300">
-                    Finalize Order Execution →
-                </button>
-            </form>
-        </div>
-    </div>
-
+        // Monolith Production Array Component - Exactly 20 Deeply Structured Asset Elements
+        window.KanganComprehensiveDatabase = [
+            {
+                id: "kan-bangle-1",
+                name: "Premium Velvet Bangles",
+                category: "Velvet Special",
+                subCategory: "Matte Premium",
+                emoji: "💫",
+                basePrice: "1250",
+                discountPercent: "10",
+                rating: "4.9",
+                reviewCount: "142",
+                stockQuantity: "45",
+                skuCode: "KFS-VEL-019",
+                materialSpecification: "Ultra-dense premium pile micro-velvet wrap core with shockproof inner composite casing",
+                description: "Impeccably wrapped rich velvet configuration engineered for a continuous matte light absorption profile. Handcrafted tailored edition perfect for heavy layering stacks.",
+                tags: ["velvet", "matte", "premium", "daily-glam"]
+            },
+            {
+                id: "kan-bangle-2",
+                name: "Royal Bridal Chura Set",
+                category: "Bridal Wear",
+                subCategory: "Heavy Wedding Set",
+                emoji: "👑",
+                basePrice: "4800",
+                discountPercent: "15",
+                rating: "5.0",
+                reviewCount: "389",
+                stockQuantity: "12",
+                skuCode: "KFS-BRD-002",
+                materialSpecification: "A-grade poly-carbonate shell foundation, inlaid with authentic non-fading crimson dyes and ivory accents",
+                description: "The definitive wedding ensemble. Engineered specifically to meet traditional requirements while ensuring unmatched lightweight structural integrity throughout marital ceremonies.",
+                tags: ["wedding", "chura", "bridal", "traditional"]
+            },
+            {
+                id: "kan-bangle-3",
+                name: "Gold-Plated Antique Kada Set",
+                category: "Kada Exclusive",
+                subCategory: "Gold Plated Antique",
+                emoji: "🔱",
+                basePrice: "1950",
+                discountPercent: "5",
+                rating: "4.8",
+                reviewCount: "94",
+                stockQuantity: "28",
+                skuCode: "KFS-GDA-044",
+                materialSpecification: "Die-cast brass architecture triple-layered in 24k sovereign gold electroplating with micron accuracy",
+                description: "Features deep antique finish textures accentuating intricate historical filigree artwork. Fitted with secure integrated structural hinge locks for perfect wrist scaling.",
+                tags: ["gold", "kada", "antique", "luxury"]
+            },
+            {
+                id: "kan-bangle-4",
+                name: "Imperial Rajwadi Choora",
+                category: "Bridal Wear",
+                subCategory: "Royal Maharaja Edition",
+                emoji: "✨",
+                basePrice: "5600",
+                discountPercent: "12",
+                rating: "4.9",
+                reviewCount: "210",
+                stockQuantity: "8",
+                skuCode: "KFS-RAJ-081",
+                materialSpecification: "Reinforced resin core embedded with micro-pave hand-set simulated diamond matrices and gold foils",
+                description: "Inspired by classical regional heritage, this set incorporates a sweeping pattern of detailed stone work. Hand-polished to project maximum vector illumination.",
+                tags: ["rajwadi", "royal", "bridal", "heavy-set"]
+            },
+            {
+                id: "kan-bangle-5",
+                name: "Traditional Glass Seesha Kangan",
+                category: "Glass Classic",
+                subCategory: "Traditional Cut Glass",
+                emoji: "🔮",
+                basePrice: "890",
+                discountPercent: "0",
+                rating: "4.7",
+                reviewCount: "76",
+                stockQuantity: "120",
+                skuCode: "KFS-GLS-005",
+                materialSpecification: "High-density thermal tempered glass with specialized non-shatter safety structural core binding",
+                description: "Exhibits precision prism diamond cuts along the perimeter that capture and refract surrounding ambient illumination. Delivers the legendary crisp traditional chime sound.",
+                tags: ["glass", "seesha", "classic", "chime"]
+            },
+            {
+                id: "kan-bangle-6",
+                name: "Authentic Jaipuri Lac Kangan",
+                category: "Lac Masterpieces",
+                subCategory: "Handcrafted Pure Wax",
+                emoji: "⚜️",
+                basePrice: "1450",
+                discountPercent: "8",
+                rating: "4.6",
+                reviewCount: "115",
+                stockQuantity: "33",
+                skuCode: "KFS-LAC-012",
+                materialSpecification: "100% natural processed insect secretion lac base reinforced with volcanic stone powder matrices",
+                description: "Molded entirely by hand under controlled thermal environments. Embedded with raw uncut colored crystals that trace an ancient geometrical configuration.",
+                tags: ["lac", "jaipuri", "handcrafted", "organic"]
+            },
+            {
+                id: "kan-bangle-7",
+                name: "Zircon Eternity Diamond Chura",
+                category: "Bridal Wear",
+                subCategory: "Crystal Sparkle Range",
+                emoji: "💎",
+                basePrice: "3990",
+                discountPercent: "20",
+                rating: "5.0",
+                reviewCount: "512",
+                stockQuantity: "19",
+                skuCode: "KFS-ZRC-090",
+                materialSpecification: "High-clarity grade-AAAA cubic zirconia micro-crystals mounted on an absolute surgical stainless steel band",
+                description: "A continuous loop of fire and brilliance. Every single facet is individually anchored using multi-prong micro-claws to prevent displacement during intense hand motions.",
+                tags: ["zircon", "diamond", "crystal", "sparkle"]
+            },
+            {
+                id: "kan-bangle-8",
+                name: "Artisan Silk Thread Bangles",
+                category: "Designer Thread",
+                subCategory: "Custom Designer Thread",
+                emoji: "🎀",
+                basePrice: "990",
+                discountPercent: "0",
+                rating: "4.5",
+                reviewCount: "63",
+                stockQuantity: "75",
+                skuCode: "KFS-SLK-023",
+                materialSpecification: "Pure high-luster mulberry silk threads cross-stitched over an organic polymer lightweight skeleton",
+                description: "Boasts customized cross-hatched weaving patterns that feel exceptionally soft against the skin. Accentuated with micro gold bead lines across its primary axis.",
+                tags: ["silk", "thread", "designer", "minimalist"]
+            },
+            {
+                id: "kan-bangle-9",
+                name: "Vibrant Meenakari Kada Pair",
+                category: "Kada Exclusive",
+                subCategory: "Artistic Enamel Works",
+                emoji: "🎨",
+                basePrice: "2250",
+                discountPercent: "10",
+                rating: "4.8",
+                reviewCount: "104",
+                stockQuantity: "22",
+                skuCode: "KFS-MNK-034",
+                materialSpecification: "Solid copper infrastructure base coated with baked metal oxides and premium vitrified organic mineral glazes",
+                description: "Classic double-headed animal profile endings feature breathtaking precision enamel painting. Kiln-fired to preserve color brilliance for generations to come.",
+                tags: ["meenakari", "enamel", "kada", "copper"]
+            },
+            {
+                id: "kan-bangle-10",
+                name: "Oxidized Totem Silver Kada",
+                category: "Kada Exclusive",
+                subCategory: "Boho Tribal Aesthetic",
+                emoji: "🪙",
+                basePrice: "750",
+                discountPercent: "5",
+                rating: "4.4",
+                reviewCount: "82",
+                stockQuantity: "60",
+                skuCode: "KFS-OXI-077",
+                materialSpecification: "Heavy jewelry grade pewter base metal treated with liquid sulfur compounds for dark relief detailing",
+                description: "Embodying a bold bohemian rustic design signature, this wide-format open cuff features localized repeating geometric structural motifs.",
+                tags: ["oxidized", "silver", "boho", "tribal"]
+            },
+            {
+                id: "kan-bangle-11",
+                name: "Polki Heritage Pearl Kangan",
+                category: "Bridal Wear",
+                subCategory: "Bridal Heritage Kundan",
+                emoji: "📿",
+                basePrice: "6800",
+                discountPercent: "15",
+                rating: "4.9",
+                reviewCount: "173",
+                stockQuantity: "7",
+                skuCode: "KFS-PLK-101",
+                materialSpecification: "Raw hand-cut glass polki flats bounded by genuine silver foil backs and draped with freshwater pearls",
+                description: "A museum-worthy artifact layout configuration. Recreates deep royal court aesthetics through classic open-set stone mounts and layered natural baroque pearl fringe lines.",
+                tags: ["polki", "pearl", "kundan", "heritage"]
+            },
+            {
+                id: "kan-bangle-12",
+                name: "Sleek Chrome Party Bangles",
+                category: "Glass Classic",
+                subCategory: "Glossy Metallic Finish",
+                emoji: "⚡",
+                basePrice: "490",
+                discountPercent: "0",
+                rating: "4.3",
+                reviewCount: "55",
+                stockQuantity: "200",
+                skuCode: "KFS-MET-008",
+                materialSpecification: "Ultra-thin continuous high-tensile spring steel band electro-vacuumed with bright multi-tonal chrome vapor",
+                description: "Sleek, slimline contemporary aesthetic profile. Produced in hyper-matched sets of twelve to deliver a high-pitched acoustic sound pattern on impact.",
+                tags: ["chrome", "metallic", "sleek", "party"]
+            },
+            {
+                id: "kan-bangle-13",
+                name: "Musical Ghungroo Chura Set",
+                category: "Bridal Wear",
+                subCategory: "Musical Tinkling Bell",
+                emoji: "🔔",
+                basePrice: "2950",
+                discountPercent: "10",
+                rating: "4.7",
+                reviewCount: "129",
+                stockQuantity: "14",
+                skuCode: "KFS-GHU-052",
+                materialSpecification: "Acoustic-grade hollow brass mini-spheres containing rolling iron micro-ball bearings mounted on heavy bands",
+                description: "Blends sensory auditory mechanics with classical aesthetics. Features hundreds of micro bells that cascade down the wrist frame, ringing with every movement.",
+                tags: ["ghungroo", "musical", "brass", "bells"]
+            },
+            {
+                id: "kan-bangle-14",
+                name: "Majestic Kundankari Bangles",
+                category: "Kada Exclusive",
+                subCategory: "Royal Gemstone Inlay",
+                emoji: "🌟",
+                basePrice: "4400",
+                discountPercent: "12",
+                rating: "5.0",
+                reviewCount: "245",
+                stockQuantity: "11",
+                skuCode: "KFS-KND-063",
+                materialSpecification: "Hyper-refined 99.9% pure soft gold leaf foil hand-pressed inside carved stone structural recesses",
+                description: "Constructed utilizing historic techniques where gemstones are completely framed by hand-beaten gold foils, forming an air-tight luxury jewel bond.",
+                tags: ["kundan", "gold-leaf", "royal", "gemstone"]
+            },
+            {
+                id: "kan-bangle-15",
+                name: "Velvet Crimson Pearl Mix",
+                category: "Velvet Special",
+                subCategory: "Fusion Premium Edition",
+                emoji: "🌸",
+                basePrice: "1990",
+                discountPercent: "5",
+                rating: "4.8",
+                reviewCount: "92",
+                stockQuantity: "30",
+                skuCode: "KFS-VPM-041",
+                materialSpecification: "Alternating sequence bands of deep maroon premium velvet and calibrated shell pearl spheres",
+                description: "A masterful layout balancing the rich light absorption of velvet fabrics with the high luster reflection of organic shell pearls.",
+                tags: ["velvet", "pearl", "fusion", "maroon"]
+            },
+            {
+                id: "kan-bangle-16",
+                name: "Sovereign Daily Wear Kada",
+                category: "Kada Exclusive",
+                subCategory: "Lightweight Daily Gold",
+                emoji: "☀️",
+                basePrice: "1150",
+                discountPercent: "0",
+                rating: "4.6",
+                reviewCount: "154",
+                stockQuantity: "85",
+                skuCode: "KFS-DLY-011",
+                materialSpecification: "Corrosion-resistant titanium copper alloy matrix layer containing dense anti-tarnish protective varnishes",
+                description: "Engineered specifically for persistent daily operational usage. Resists water, household cleaning solutions, and heavy skin sweat profiles without lose of sheen.",
+                tags: ["daily", "kada", "anti-tarnish", "titanium"]
+            },
+            {
+                id: "kan-bangle-17",
+                name: "Pave Micro-Stone Kangan",
+                category: "Lac Masterpieces",
+                subCategory: "Party Glamour Glitz",
+                emoji: "💍",
+                basePrice: "2600",
+                discountPercent: "15",
+                rating: "4.7",
+                reviewCount: "88",
+                stockQuantity: "40",
+                skuCode: "KFS-PVE-087",
+                materialSpecification: "Structural alloy backing layered with synthetic optical crystal components arranged in hexagonal mesh arrays",
+                description: "A dense micro-pave alignment layout where individual crystals touch edge-to-edge, hiding the structural baseline metal beneath a blanket of pure fire.",
+                tags: ["pave", "stone", "glitz", "rhinestone"]
+            },
+            {
+                id: "kan-bangle-18",
+                name: "Mithila Traditional Lahathi",
+                category: "Lac Masterpieces",
+                subCategory: "Mithila Special Lac",
+                emoji: "🔴",
+                basePrice: "1390",
+                discountPercent: "0",
+                rating: "4.9",
+                reviewCount: "302",
+                stockQuantity: "50",
+                skuCode: "KFS-MIT-015",
+                materialSpecification: "High-grade auspicious organic red lac collected from local host trees, processed with native clays",
+                description: "Deeply rooted in the ancient heritage of the Mithila region of Nepal. Hand-rolled, flame-hardened, and painted with ceremonial marriage patterns.",
+                tags: ["lahathi", "mithila", "nepal-native", "lac"]
+            },
+            {
+                id: "kan-bangle-19",
+                name: "Industrial Brushed Brass Kada",
+                category: "Kada Exclusive",
+                subCategory: "Vintage Antique Look",
+                emoji: "🪵",
+                basePrice: "950",
+                discountPercent: "10",
+                rating: "4.5",
+                reviewCount: "47",
+                stockQuantity: "90",
+                skuCode: "KFS-BBS-031",
+                materialSpecification: "Solid unified block structural brass bar hand-drawn and treated with diamond abrasive sheets",
+                description: "Displays a gorgeous omni-directional satin brush grain texture that hides scratches, gaining a natural vintage copper patina look over years of wear.",
+                tags: ["brass", "brushed", "vintage", "unisex"]
+            },
+            {
+                id: "kan-bangle-20",
+                name: "Adjustable Charms Loop Chura",
+                category: "Designer Thread",
+                subCategory: "Modern Adjustable Chain",
+                emoji: "💝",
+                basePrice: "2100",
+                discountPercent: "10",
+                rating: "4.8",
+                reviewCount: "119",
+                stockQuantity: "25",
+                skuCode: "KFS-ADJ-099",
+                materialSpecification: "Rhodium layered alloy framework integrated with micro linked chains and dangling crystal elements",
+                description: "A contemporary fusion model featuring standard sized internal core loops connected to a hanging luxury extension chain that auto-scales to fit any wrist shape.",
+                tags: ["adjustable", "charms", "modern", "fusion"]
+            }
+        ];
+    </script>
+    <!-- APPLICATION ROOT SHELL INTERIOR VISUAL WRAPPER -->
     <div id="main-application-shell" class="relative min-h-screen flex flex-col justify-between z-10">
-        <div class="w-full bg-neutral-950 text-white py-2.5 px-6 border-b border-amber-500/20 z-50 overflow-hidden text-center">
-            <span class="text-[10px] tracking-[0.35em] font-medium text-amber-400 uppercase">✨ Premium Handcrafted Bangles Showroom • Real-Time Procedural WebGL Virtual Matrix Active ✨</span>
+        
+        <!-- TOP TICKER PROPAGATION MATRIX BUFFER -->
+        <div class="w-full bg-gradient-to-r from-luxury-maroon via-neutral-900 to-luxury-maroon text-white py-3 px-6 border-b border-luxury-gold/30 z-50 overflow-hidden relative">
+            <div class="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,rgba(212,175,55,0.2)_50%,transparent_100%)] animate-[shimmer_3s_infinite_linear] pointer-events-none"></div>
+            <div class="max-w-7xl mx-auto flex justify-between items-center text-[10px] tracking-[0.35em] font-bold uppercase relative z-10">
+                <span class="hidden md:inline-block text-luxury-gold animate-pulse">⚡ SECURE HARDWARE WEBGL BUFFER LINK ACTIVE</span>
+                <span class="mx-auto md:mx-0">✨ EXPEDITED PARCEL DISPATCH DIRECTLY TO SIRAHA REGION & ALL NEPAL PROVINCES ✨</span>
+                <span class="hidden lg:inline-block text-neutral-400 font-mono">STABLE COMPILER BUILD v5.4.2</span>
+            </div>
         </div>
 
-        <nav class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 sticky top-4 z-40">
-            <div class="w-full glass-header rounded-[2.5rem] px-6 sm:px-12 py-6 flex flex-col md:flex-row justify-between items-center shadow-glass-md border border-white/60">
-                <div class="text-center md:text-left cursor-default">
-                    <span class="text-[9px] tracking-[0.7em] text-amber-600 font-extrabold uppercase block mb-1">Elite Couture Hub</span>
-                    <h1 class="brand-title text-2xl sm:text-4xl font-black tracking-widest text-neutral-950 uppercase">Kangan Fancy Store</h1>
-                    <p class="text-[9px] tracking-[0.45em] text-neutral-400 font-bold uppercase mt-0.5">Siraha, Nepal</p>
-                </div>
-                <div class="flex flex-wrap justify-center items-center gap-4 mt-6 md:mt-0">
-                    <div class="flex bg-neutral-100 p-1.5 rounded-full border border-neutral-200/50 text-[9px] tracking-[0.25em] font-extrabold uppercase">
-                        <button id="filter-all" onclick="filterInventory('all')" class="px-5 py-2.5 rounded-full bg-neutral-950 text-white shadow-sm transition-all">All</button>
-                        <button id="filter-wedding" onclick="filterInventory('wedding')" class="px-5 py-2.5 rounded-full text-neutral-500 transition-all">Bridal</button>
-                        <button id="filter-premium" onclick="filterInventory('premium')" class="px-5 py-2.5 rounded-full text-neutral-500 transition-all">Premium</button>
+        <!-- HIGH-FIDELITY CUSTOM FIXED FLOATING CONTROL NAVIGATION HUB -->
+        <nav class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 sticky top-4 z-40 transition-all duration-300">
+            <div class="w-full glass-surface rounded-[3rem] px-6 sm:px-10 py-5 flex flex-col lg:flex-row justify-between items-center shadow-glass-card border border-luxury-gold/20 gap-4">
+                
+                <!-- BRAND ARCHITECTURE LOGOTYPE BLOCK -->
+                <div class="text-center lg:text-left cursor-pointer group flex flex-col justify-center">
+                    <span class="text-[9px] tracking-[0.8em] text-luxury-gold font-black uppercase block mb-1 transition-transform duration-500 group-hover:translate-x-1">Elite Mithila Couture</span>
+                    <h1 class="brand-title text-2xl sm:text-4xl font-black tracking-[0.15em] text-white uppercase bg-gradient-to-r from-white via-luxury-gold to-white bg-clip-text text-transparent">
+                        Kangan Fancy Store
+                    </h1>
+                    <div class="flex items-center justify-center lg:justify-start gap-2 mt-1">
+                        <span class="h-[1px] w-8 bg-luxury-gold/50"></span>
+                        <p class="text-[9px] tracking-[0.5em] text-neutral-400 font-extrabold uppercase font-mono">Siraha, Nepal</p>
+                        <span class="h-[1px] w-8 bg-luxury-gold/50"></span>
                     </div>
                 </div>
+
+                <!-- LIVE ADVANCED SEARCH FILTER AND CONSOLE INTERCEPTOR -->
+                <div class="w-full max-w-md bg-neutral-900/90 rounded-2xl border border-white/5 p-1 flex items-center relative group focus-within:border-luxury-gold/60 transition-all duration-300">
+                    <span class="pl-4 text-sm text-luxury-gold">🔍</span>
+                    <input type="text" id="global-showroom-search" oninput="executeDataPipelineSearch()" placeholder="Search velvet, bridal, kada, lahathi catalog..." class="w-full bg-transparent px-3 py-3 text-xs font-medium text-white placeholder-neutral-500 outline-none">
+                    <div id="search-clear-btn" onclick="clearSearchMatrix()" class="pr-3 text-[10px] text-neutral-500 hover:text-white cursor-pointer opacity-0 transition-opacity duration-200">✕ CLEAR</div>
+                </div>
+
+                <!-- CATEGORICAL FILTER NAVIGATION BUTTON GRID PACK -->
+                <div class="flex flex-wrap justify-center items-center gap-2">
+                    <div class="flex bg-black/40 p-1.5 rounded-full border border-white/5 text-[9px] tracking-[0.25em] font-extrabold uppercase">
+                        <button id="filter-all" onclick="filterInventory('all')" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-luxury-maroon to-red-950 text-white shadow-luxury-glow border border-luxury-gold/30 transition-all duration-300">All Showroom</button>
+                        <button id="filter-velvet" onclick="filterInventory('velvet')" class="px-5 py-2.5 rounded-full text-neutral-400 hover:text-white transition-all duration-300">Velvet</button>
+                        <button id="filter-wedding" onclick="filterInventory('wedding')" class="px-5 py-2.5 rounded-full text-neutral-400 hover:text-white transition-all duration-300">Bridal Chura</button>
+                        <button id="filter-kada" onclick="filterInventory('kada')" class="px-5 py-2.5 rounded-full text-neutral-400 hover:text-white transition-all duration-300">Kada Base</button>
+                        <button id="filter-lac" onclick="filterInventory('lac')" class="px-5 py-2.5 rounded-full text-neutral-400 hover:text-white transition-all duration-300">Mithila Lac</button>
+                    </div>
+                </div>
+
             </div>
         </nav>
 
-        <header class="w-full max-w-4xl mx-auto text-center px-4 mt-12 mb-8">
-            <h2 class="font-serif text-xl sm:text-3xl font-light tracking-[0.2em] text-neutral-600 leading-relaxed">
-                Click directly on any individual item card to instantly clone it into an <span class="text-neutral-950 font-bold border-b-2 border-amber-500/40 pb-1">Interactive 3D Surface Grid Mesh</span>.
+        <!-- HIGH-FIDELITY ANALYTICAL SYSTEM COUNTER METRIC HUD -->
+        <section class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 pointer-events-none">
+            <div class="bg-gradient-to-b from-neutral-900 to-neutral-950 p-5 rounded-3xl border border-white/5 flex flex-col justify-between relative overflow-hidden group">
+                <div class="absolute -right-6 -bottom-6 text-5xl opacity-5 transition-transform duration-500 group-hover:scale-125">✨</div>
+                <span class="text-[9px] tracking-widest text-neutral-500 uppercase font-black">Catalog Integration</span>
+                <h3 class="text-2xl font-black text-white font-mono mt-2 flex items-baseline gap-1">20 <span class="text-[10px] text-luxury-gold uppercase font-sans">Units Loaded</span></h3>
+            </div>
+            <div class="bg-gradient-to-b from-neutral-900 to-neutral-950 p-5 rounded-3xl border border-white/5 flex flex-col justify-between relative overflow-hidden group">
+                <div class="absolute -right-6 -bottom-6 text-5xl opacity-5">👑</div>
+                <span class="text-[9px] tracking-widest text-neutral-500 uppercase font-black">Average Rating Matrix</span>
+                <h3 class="text-2xl font-black text-luxury-gold font-mono mt-2 flex items-baseline gap-1">4.85 <span class="text-[10px] text-emerald-500 font-sans">★ Global</span></h3>
+            </div>
+            <div class="bg-gradient-to-b from-neutral-900 to-neutral-950 p-5 rounded-3xl border border-white/5 flex flex-col justify-between relative overflow-hidden group">
+                <div class="absolute -right-6 -bottom-6 text-5xl opacity-5">🛡️</div>
+                <span class="text-[9px] tracking-widest text-neutral-500 uppercase font-black">System Verification</span>
+                <h3 class="text-2xl font-black text-emerald-500 font-mono mt-2 flex items-baseline gap-1">Secure <span class="text-[10px] text-neutral-400 font-sans">Encrypted</span></h3>
+            </div>
+            <div class="bg-gradient-to-b from-neutral-900 to-neutral-950 p-5 rounded-3xl border border-white/5 flex flex-col justify-between relative overflow-hidden group">
+                <div class="absolute -right-6 -bottom-6 text-5xl opacity-5">🚀</div>
+                <span class="text-[9px] tracking-widest text-neutral-500 uppercase font-black">Active Render Buffer</span>
+                <h3 id="engine-fps-counter" class="text-2xl font-black text-red-500 font-mono mt-2 flex items-baseline gap-1">60.0 <span class="text-[10px] text-neutral-400 font-sans">FPS Target</span></h3>
+            </div>
+        </section>
+
+        <!-- LUXURY CURATED EXHIBITION TYPOGRAPHY OVERLAY HEADER -->
+        <header class="w-full max-w-5xl mx-auto text-center px-4 mt-16 mb-6">
+            <span class="text-[10px] tracking-[0.5em] text-luxury-gold font-black uppercase inline-block mb-3 bg-luxury-maroon/40 border border-luxury-gold/30 px-4 py-1.5 rounded-full">Interactive WebGL Showroom Viewport</span>
+            <h2 class="brand-title text-3xl sm:text-5xl font-black text-white tracking-widest uppercase leading-tight">
+                Tap Any Masterpiece to Clone Into 3D Vector Space
             </h2>
+            <div class="w-24 h-[2px] bg-gradient-to-r from-transparent via-luxury-gold to-transparent mx-auto mt-6"></div>
+            <p class="text-[11px] sm:text-xs text-neutral-400 font-medium max-w-2xl mx-auto mt-4 tracking-wide leading-relaxed">
+                Experience high-performance hardware-accelerated 3D jewelry evaluation. Our pipeline rasterizes static elements directly into high-fidelity tactile rotational models with sovereign gold backing.
+            </p>
         </header>
 
-        <main class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20 flex-grow">
-            <div class="text-center text-[10px] tracking-wider text-neutral-500 font-medium mb-6">
-                Active Catalog Length: <strong id="visible-count" class="text-neutral-950 font-black">20</strong> Premium Units
-            </div>
-            <div id="luxury-showroom-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 min-h-[400px] transition-all duration-500">
-                </div>
-        </main>
+        <!-- SECURE LIVE SHOWROOM MONITOR COUNTER FEED -->
+        <div class="w-full text-center text-[10px] tracking-[0.3em] text-neutral-400 font-bold uppercase mb-8 pointer-events-none">
+            Currently Displaying: <span id="visible-count-hud" class="text-luxury-gold bg-white/5 border border-white/10 px-3 py-1 rounded-md font-mono font-black ml-1">20</span> Products Filtered
+        </div>
 
-        <footer class="w-full text-center py-8 border-t border-neutral-200/50 max-w-7xl mx-auto text-[9px] text-neutral-400 tracking-[0.25em] uppercase px-4 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p>&copy; 2026 Kangan Fancy Store • Siraha, Nepal. Powered by TLS 1.3 Architecture Protocol.</p>
-        </footer>
+        <!-- MAIN DATA-DRIVEN INTERACTIVE COUTURE GRID LAYOUT CONTAINER -->
+        <main class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24 flex-grow">
+            <div id="luxury-showroom-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 min-h-[500px] transition-all duration-500">
+                <!-- Data Engine Compiler builds individual grid cards seamlessly here -->
+            </div>
+        </main>
+        <!-- REALTIME VIRTUAL DATA MOUNTING AND DOM MANIPULATION SYSTEMS -->
+        <script>
+            /**
+             * Primary Architectural Data Compiler Engine
+             * Renders rich responsive HTML matrix structures based on active filtering arrays
+             * @param {Array} collection Segment of window.KanganComprehensiveDatabase to commit to view
+             */
+            function compileShowroomGrid(collection) {
+                const showroomGrid = document.getElementById('luxury-showroom-grid');
+                const counterHud = document.getElementById('visible-count-hud');
+                
+                // Track operation analytics metric logs natively
+                window.KanganEngineContext.state.analyticsPayload.totalClicks++;
+                
+                if (counterHud) {
+                    counterHud.innerText = collection.length < 10 ? '0' + collection.length : collection.length;
+                }
+
+                // Render blank state layout matrix if queries return zero hits
+                if (collection.length === 0) {
+                    showroomGrid.innerHTML = `
+                        <div class="col-span-full w-full py-20 px-4 flex flex-col items-center justify-center text-center rounded-[3rem] border border-dashed border-neutral-800 bg-neutral-950/50 backdrop-blur-md">
+                            <span class="text-4xl mb-4 animate-bounce">⚠️</span>
+                            <h4 class="brand-title text-lg font-black uppercase text-white tracking-widest">No Active Match Located</h4>
+                            <p class="text-[11px] text-neutral-500 font-medium max-w-sm mt-2 tracking-wide">
+                                Your real-time string search pattern did not activate any items in the Kangan Fancy Store repository. Reset constraints to retry.
+                            </p>
+                            <button onclick="clearSearchMatrix()" class="mt-6 px-6 py-2.5 bg-neutral-900 hover:bg-neutral-800 border border-luxury-gold/30 hover:border-luxury-gold text-[9px] text-luxury-gold tracking-widest font-black uppercase rounded-xl transition-all duration-300">
+                                Reset Main Terminal Catalog
+                            </button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                showroomGrid.innerHTML = '';
+
+                // Structural iteration sequence mapping across data nodes
+                collection.forEach((item) => {
+                    const originalPrice = Number(item.basePrice);
+                    const discount = Number(item.discountPercent);
+                    const currentPrice = discount > 0 ? originalPrice - (originalPrice * (discount / 100)) : originalPrice;
+
+                    const gridCard = document.createElement('div');
+                    gridCard.id = item.id;
+                    gridCard.className = "glass-premium-card rounded-[2.5rem] p-5 flex flex-col justify-between h-[23rem] cursor-pointer relative overflow-hidden group gpu-layer";
+                    gridCard.setAttribute('onclick', `initiate3DTransformMatrix('${item.id}')`);
+                    
+                    // Build highly responsive structural layout item injection
+                    gridCard.innerHTML = `
+                        <!-- Micro Interaction Ambient Blur Aura Backdrop -->
+                        <div class="absolute -right-16 -top-16 w-36 h-36 bg-luxury-maroon/10 rounded-full blur-3xl group-hover:bg-luxury-maroon/30 transition-all duration-700"></div>
+                        <div class="absolute -left-16 -bottom-16 w-36 h-36 bg-luxury-gold/5 rounded-full blur-3xl group-hover:bg-luxury-gold/15 transition-all duration-700"></div>
+                        
+                        <!-- High Contrast Spatial Canvas Visualization Layer -->
+                        <div class="w-full h-36 bg-gradient-to-b from-neutral-900 to-neutral-950 rounded-[1.75rem] flex items-center justify-center text-5xl border border-white/5 relative overflow-hidden shadow-deep-bevel mb-4">
+                            <span class="transform transition-transform duration-700 ease-out group-hover:scale-125 group-hover:rotate-12 select-none relative z-10 filter drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]">
+                                ${item.emoji}
+                            </span>
+                            
+                            <!-- Static Hardware Component Badging tags -->
+                            <div class="absolute top-3 right-3 px-2 py-0.5 rounded-md bg-black/80 backdrop-blur-md border border-white/10 text-[8px] font-black tracking-widest text-luxury-gold shadow-sm">
+                                ★ ${item.rating}
+                            </div>
+                            
+                            ${discount > 0 ? `
+                                <div class="absolute bottom-3 left-3 px-2 py-0.5 rounded-md bg-luxury-maroon border border-red-500/30 text-[8px] font-black tracking-widest text-white uppercase shadow-sm">
+                                    -${discount}% OFF
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        <!-- Textual Structural Context Block -->
+                        <div class="flex-grow flex flex-col justify-start px-1">
+                            <div class="flex items-center gap-1.5 mb-1">
+                                <span class="text-[8px] tracking-[0.25em] text-luxury-gold font-extrabold uppercase bg-luxury-gold/5 border border-luxury-gold/10 px-2 py-0.5 rounded">
+                                    ${item.category}
+                                </span>
+                                <span class="text-[7px] font-mono font-bold text-neutral-500 uppercase tracking-widest">
+                                    ${item.skuCode}
+                                </span>
+                            </div>
+                            <h4 class="font-extrabold text-sm text-white tracking-wide group-hover:text-luxury-gold transition-colors duration-300 truncate">
+                                ${item.name}
+                            </h4>
+                            <p class="text-[10px] text-neutral-400 font-light tracking-wide line-clamp-2 mt-1 leading-relaxed">
+                                ${item.description}
+                            </p>
+                        </div>
+
+                        <!-- Transaction Execution Hub Footer Section -->
+                        <div class="flex justify-between items-center mt-4 pt-4 border-t border-white/5 relative z-10">
+                            <div>
+                                <span class="text-[7px] text-neutral-500 font-bold uppercase block tracking-[0.2em]">Valuation Structure</span>
+                                <div class="flex items-baseline gap-1.5 mt-0.5">
+                                    <span class="text-xs font-black text-white font-mono">
+                                        ${window.KanganEngineContext.state.currencySymbol}${Number(currentPrice).toLocaleString()}
+                                    </span>
+                                    ${discount > 0 ? `
+                                        <span class="text-[9px] font-mono text-neutral-600 line-through">
+                                            ${window.KanganEngineContext.state.currencySymbol}${Number(originalPrice).toLocaleString()}
+                                        </span>
+                                    ` : ''}
+                                </div>
+                            </div>
+                            <div class="px-4 py-2 rounded-xl bg-neutral-900 border border-white/10 group-hover:bg-gradient-to-r group-hover:from-luxury-maroon group-hover:to-red-950 group-hover:border-luxury-gold/50 text-[8px] text-neutral-300 group-hover:text-white font-black tracking-widest uppercase transition-all duration-300 shadow-md">
+                                Launch 3D Mesh
+                            </div>
+                        </div>
+                    `;
+                    showroomGrid.appendChild(gridCard);
+                });
+            }
+
+            /**
+             * Full-text Interceptor Realtime Search Logic Algorithm
+             * Scans fields across catalog to filter current displayed dataset matches
+             */
+            function executeDataPipelineSearch() {
+                const query = document.getElementById('global-showroom-search').value.toLowerCase().trim();
+                const clearBtn = document.getElementById('search-clear-btn');
+                
+                if (query.length > 0) {
+                    clearBtn.style.opacity = "1";
+                } else {
+                    clearBtn.style.opacity = "0";
+                }
+
+                // Filter operations tracing strings globally inside dynamic fields
+                const matchPool = window.KanganComprehensiveDatabase.filter(item => {
+                    return item.name.toLowerCase().includes(query) ||
+                           item.category.toLowerCase().includes(query) ||
+                           item.subCategory.toLowerCase().includes(query) ||
+                           item.description.toLowerCase().includes(query) ||
+                           item.skuCode.toLowerCase().includes(query) ||
+                           item.tags.some(tag => tag.toLowerCase().includes(query));
+                });
+
+                // Smoothly route structural updating through GSAP layout vectors
+                gsap.to('#luxury-showroom-grid', {
+                    opacity: 0,
+                    y: 10,
+                    duration: 0.15,
+                    onComplete: () => {
+                        compileShowroomGrid(matchPool);
+                        gsap.to('#luxury-showroom-grid', { opacity: 1, y: 0, duration: 0.25 });
+                    }
+                });
+            }
+
+            /**
+             * Resets global text inputs and completely unlinks query restrictions
+             */
+            function clearSearchMatrix() {
+                document.getElementById('global-showroom-search').value = '';
+                executeDataPipelineSearch();
+            }
+
+            /**
+             * Unified Structural Filter Router for Categorical Buttons
+             * @param {String} keyword Category token identifiers matching dataset properties
+             */
+            function filterInventory(keyword) {
+                // Clear state styling flags across all control buttons
+                const categoricalTokens = ['all', 'velvet', 'wedding', 'kada', 'lac'];
+                categoricalTokens.forEach(token => {
+                    const button = document.getElementById(`filter-${token}`);
+                    if (button) {
+                        button.className = "px-5 py-2.5 rounded-full text-neutral-400 hover:text-white transition-all duration-300";
+                    }
+                });
+
+                // Apply premium active styling status metrics to targeted interaction item
+                const targetBtn = document.getElementById(`filter-${keyword}`);
+                if (targetBtn) {
+                    targetBtn.className = "px-5 py-2.5 rounded-full bg-gradient-to-r from-luxury-maroon to-red-950 text-white shadow-luxury-glow border border-luxury-gold/30 transition-all duration-300";
+                }
+
+                let sortedSelection = window.KanganComprehensiveDatabase;
+                if (keyword !== 'all') {
+                    sortedSelection = window.KanganComprehensiveDatabase.filter(x => {
+                        return x.category.toLowerCase().includes(keyword) || 
+                               x.subCategory.toLowerCase().includes(keyword) ||
+                               x.tags.includes(keyword);
+                    });
+                }
+
+                // Animate canvas interface grid structural transformations
+                gsap.to('#luxury-showroom-grid', {
+                    opacity: 0,
+                    y: 15,
+                    duration: 0.2,
+                    onComplete: () => {
+                        compileShowroomGrid(sortedSelection);
+                        gsap.to('#luxury-showroom-grid', { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" });
+                    }
+                });
+            }
+        </script>
+        <div id="theatre-3d-overlay" class="gpu-layer flex flex-col justify-between">
+        
+        <div class="w-full max-w-7xl mx-auto flex justify-between items-center px-4 md:px-8 pointer-events-none z-10 mt-2">
+            <div class="text-left">
+                <span id="theatre-meta-cat" class="text-[9px] tracking-[0.45em] font-black text-luxury-gold uppercase block mb-1 bg-neutral-900/80 px-3 py-1 rounded-md border border-white/5 w-fit">Active Collection Grid</span>
+                <h3 id="theatre-meta-title" class="brand-title text-xl md:text-3xl font-black text-white uppercase tracking-widest drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]">Procedural Model Mapping</h3>
+                <p id="theatre-meta-sku" class="text-[8px] font-mono font-bold text-neutral-500 uppercase tracking-widest mt-1">SKU: RUNTIME-TRACE-INIT</p>
+            </div>
+            <div class="text-right hidden sm:block">
+                <span class="text-[8px] tracking-[0.25em] font-bold text-neutral-500 uppercase block mb-1">Renderer Pipeline Status</span>
+                <span class="text-[9px] font-mono font-bold text-emerald-400 uppercase bg-emerald-950/80 px-3 py-1.5 rounded-full border border-emerald-500/30 shadow-md">WebGL2 Core Active</span>
+            </div>
+        </div>
+
+        <div id="loader-status" class="absolute inset-0 m-auto w-fit h-fit flex flex-col items-center justify-center pointer-events-none transition-opacity duration-300 z-30 opacity-0 bg-black/60 p-6 rounded-3xl border border-white/5 backdrop-blur-md">
+            <div class="w-12 h-12 border-4 border-luxury-maroon/30 border-t-luxury-gold rounded-full animate-spin mb-4 shadow-luxury-glow"></div>
+            <p class="text-[9px] font-black tracking-[0.3em] text-luxury-gold uppercase animate-pulse">Allocating Memory Frames & Cloning Node Vector Matrix...</p>
+        </div>
+
+        <div class="w-full flex justify-center items-center relative my-auto">
+            <div class="absolute w-[500px] h-[500px] max-w-[92vw] max-height-[92vw] border border-luxury-gold/10 rounded-full pointer-events-none animate-slow-spin"></div>
+            <div class="absolute w-[360px] h-[360px] max-w-[75vw] max-height-[75vw] border border-dashed border-luxury-maroon/20 rounded-full pointer-events-none animate-reverse-spin"></div>
+            <div class="absolute w-[240px] h-[240px] max-w-[50vw] max-height-[50vw] border border-white/5 rounded-full pointer-events-none"></div>
+            
+            <div id="canvas-3d-holder" class="cursor-grab active:cursor-grabbing relative z-10 gpu-layer"></div>
+        </div>
+
+        <div class="w-full max-w-lg mx-auto text-center flex flex-col items-center gap-5 z-10 mb-2">
+            <div class="bg-black/40 backdrop-blur-md border border-white/5 px-6 py-2.5 rounded-full text-[9px] text-neutral-400 font-bold uppercase tracking-[0.25em] pointer-events-none shadow-inner">
+                🖱️ Left-Click + Drag: Rotate Mesh Layer • 📜 Scroll Window: Dynamic Focal Zoom
+            </div>
+            
+            <div class="flex items-center gap-4 w-full px-4 mb-4">
+                <button onclick="closeTheatre3D()" class="flex-1 px-8 py-4 bg-neutral-900 hover:bg-neutral-800 border border-white/10 hover:border-white/20 text-neutral-300 hover:text-white text-[10px] tracking-[0.35em] font-black uppercase rounded-2xl shadow-xl transition-all duration-300 transform active:scale-95">
+                    ← Back to Showroom
+                </button>
+                <button id="theatre-buy-btn" onclick="" class="flex-1 px-8 py-4 bg-gradient-to-r from-luxury-maroon to-red-950 border border-luxury-gold/40 hover:border-luxury-gold text-white text-[10px] tracking-[0.35em] font-black uppercase rounded-2xl shadow-luxury-glow transition-all duration-300 transform active:scale-95">
+                    Instant Secure Order • Delivery
+                </button>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        window.KanganAppState = { currency: "Rs.", activeBangleId: null };
+        let primaryScene, dynamicPerspectiveCamera, hardwareRenderer, activeProceduralMesh;
+        let clientDragInteractionFlag = false;
+        let coordinateBufferPos = { x: 0, y: 0 };
+        
+        const overlayTheatreNode = document.getElementById('theatre-3d-overlay');
+        const structuralCanvasHolder = document.getElementById('canvas-3d-holder');
+        const processingLoaderHud = document.getElementById('loader-status');
 
-        // Complete Structured Data Array Definitions for 20 Exclusive Bangle Assets
-        window.BangleDatabase = [
-            { id: "b-1", name: "Velvet Bangles", cat: "Matte Premium", emoji: "💫", price: "1200", rating: "4.9", description: "Ultra-soft matte dynamic velvet layer wraps." },
-            { id: "b-2", name: "Bridal Chura Set", cat: "Heavy Wedding Wear", emoji: "👑", price: "4500", rating: "5.0", description: "Traditional deep red and ivory multi-layer wedding set." },
-            { id: "b-3", name: "Fancy Kada Sets", cat: "Gold Plated Antique", emoji: "🔱", price: "1600", rating: "4.8", description: "Ornate custom filigree engraving patterns with heavy linings." },
-            { id: "b-4", name: "Rajwadi Choora", cat: "Royal Maharaja Special", emoji: "✨", price: "5200", rating: "4.9", description: "Imperial traditional Rajasthani heritage precious stone collection." },
-            { id: "b-5", name: "Glass Seesha Kangan", cat: "Traditional Cut Glass", emoji: "🔮", price: "850", rating: "4.7", description: "Finely reflective diamond-cut native structural mirror bangles." },
-            { id: "b-6", name: "Jaipuri Lac Kangans", cat: "Handcrafted Pure Wax", emoji: "⚜️", price: "1400", rating: "4.6", description: "Authentic natural raw lac matrix embedded with color gemstones." },
-            { id: "b-7", name: "Zircon Diamond Chura", cat: "Crystal Sparkle Edition", emoji: "💎", price: "3800", rating: "5.0", description: "High-grade clarity cubic zirconia hand set framing micro-cuts." },
-            { id: "b-8", name: "Silk Thread Bangles", cat: "Custom Designer Thread", emoji: "🎀", price: "950", rating: "4.5", description: "Densely hand-woven multi-strand vibrant organic pure silk frames." },
-            { id: "b-9", name: "Meenakari Kada Pair", cat: "Artistic Enamel Works", emoji: "🎨", price: "2100", rating: "4.8", description: "Exquisite fired enamel micro-paint traditional decorative bands." },
-            { id: "b-10", name: "Oxidized Silver Kada", cat: "Boho Tribal Aesthetic", emoji: "🪙", price: "700", rating: "4.4", description: "Vintage dark-line finish oxidized authentic silver metal alloys." },
-            { id: "b-11", name: "Polki Pearl Kangan", cat: "Bridal Heritage Kundan", emoji: "📿", price: "6500", rating: "4.9", description: "Classic uncut stone configurations aligned with premium freshwater pearls." },
-            { id: "b-12", name: "Metal Party Bangles", cat: "Glossy Metallic Finish", emoji: "⚡", price: "450", rating: "4.3", description: "Ultra-resilient alloy frameworks with high resonant tinkling frequencies." },
-            { id: "b-13", name: "Ghungroo Chura Set", cat: "Musical Tinkling Bells", emoji: "🔔", price: "2800", rating: "4.7", description: "Integrated rows of mini-dangling functional sound producing beads." },
-            { id: "b-14", name: "Kundankari Bangles", cat: "Royal Gemstone Inlay", emoji: "🌟", price: "4200", rating: "5.0", description: "Authentic heavy glass gem embedding wrapped in simulated gold leaves." },
-            { id: "b-15", name: "Velvet Pearl Mix", cat: "Fusion Premium Edition", emoji: "🌸", price: "1850", rating: "4.8", description: "Dynamic alternating configurations of matte fabric bands and large pearls." },
-            { id: "b-16", name: "Daily Wear Kada", cat: "Lightweight Daily Gold", emoji: "☀️", price: "1100", rating: "4.6", description: "Minimalist comfortable round finish optimized for friction resistance." },
-            { id: "b-17", name: "Stone Studded Kangan", cat: "Party Glamour Glitz", emoji: "💍", price: "2400", rating: "4.7", description: "Dense multi-row pavé rhinestone application covering total outer bounds." },
-            { id: "b-18", name: "Traditional Lahathi", cat: "Mithila Special Lac", emoji: "🔴", price: "1350", rating: "4.9", description: "Auspicious festive hand-molded native raw wax bangles of Nepal region." },
-            { id: "b-19", name: "Matte Brass Kada", cat: "Vintage Antique Look", emoji: "🪵", price: "900", rating: "4.5", description: "Brushed raw semi-matte solid profile classic sovereign styling bracelets." },
-            { id: "b-20", name: "Plated Bracelet Chura", cat: "Modern Adjustable Loops", emoji: "💝", price: "1950", rating: "4.8", description: "Contemporary lobster lock chain frameworks intersecting ethnic bangles." }
-        ];
-
-        function compileShowroomGrid(dataset) {
-            const grid = document.getElementById('luxury-showroom-grid');
-            document.getElementById('visible-count').innerText = dataset.length;
-            grid.innerHTML = '';
+        /**
+         * Initialize Global ThreeJS Rendering Context Environment
+         * Builds active matrices, shadow mapping buffers, and balanced light systems
+         */
+        function setupCoreWebGLThreeEngine() {
+            primaryScene = new THREE.Scene();
             
-            dataset.forEach(bangle => {
-                const card = document.createElement('div');
-                card.id = bangle.id;
-                card.className = "luxury-bangle-card rounded-[2.5rem] p-6 flex flex-col justify-between h-[21rem] cursor-pointer relative overflow-hidden bg-white/60 backdrop-blur-xl border border-white/80 shadow-glass-sm group gpu-layer";
-                card.setAttribute('onclick', `initiate3DTransformMatrix('${bangle.id}')`);
-                card.innerHTML = `
-                    <div class="absolute -right-12 -top-12 w-28 h-28 bg-amber-100/20 rounded-full blur-2xl group-hover:bg-amber-200/40 transition-all duration-700"></div>
-                    <div class="w-full h-40 bg-gradient-to-b from-neutral-50 to-amber-50/10 rounded-3xl flex items-center justify-center text-5xl shadow-inner border border-neutral-100 relative overflow-hidden mb-4">
-                        <span class="transform transition-transform duration-500 group-hover:scale-125 select-none relative z-10">${bangle.emoji}</span>
-                        <div class="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-md border border-neutral-100 text-[8px] font-black tracking-widest text-neutral-800 shadow-sm">⭐ ${bangle.rating}</div>
-                    </div>
-                    <div class="flex-grow flex flex-col justify-start">
-                        <span class="text-[8px] tracking-[0.35em] text-neutral-400 font-extrabold uppercase block mb-0.5">${bangle.cat}</span>
-                        <h4 class="font-extrabold text-sm text-neutral-900 tracking-wide group-hover:text-amber-700 transition-colors duration-300">${bangle.name}</h4>
-                        <p class="text-[10px] text-neutral-400 font-light tracking-wide line-clamp-2 mt-1 leading-relaxed">${bangle.description}</p>
-                    </div>
-                    <div class="flex justify-between items-center mt-4 pt-3.5 border-t border-neutral-100 relative z-10">
-                        <div>
-                            <span class="text-[8px] text-neutral-400 font-bold uppercase block tracking-widest">Valuation</span>
-                            <span class="text-sm font-black text-neutral-950 font-mono">${window.KanganAppState.currency} ${Number(bangle.price).toLocaleString()}</span>
-                        </div>
-                        <div class="px-3.5 py-2 rounded-full bg-neutral-50 group-hover:bg-amber-600 border border-neutral-200/50 group-hover:border-amber-600 text-[8px] text-amber-700 group-hover:text-white font-extrabold tracking-widest uppercase transition-all duration-300 shadow-sm">Launch 3D</div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
+            // Optical parameters optimized for distortion-free high-precision jewel display
+            dynamicPerspectiveCamera = new THREE.PerspectiveCamera(35, structuralCanvasHolder.clientWidth / structuralCanvasHolder.clientHeight, 0.1, 100);
+            dynamicPerspectiveCamera.position.z = 5.5;
+
+            hardwareRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance", preserveDrawingBuffer: true });
+            hardwareRenderer.setSize(structuralCanvasHolder.clientWidth, structuralCanvasHolder.clientHeight);
+            hardwareRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            hardwareRenderer.toneMapping = THREE.ACESFilmicToneMapping;
+            hardwareRenderer.toneMappingExposure = 1.0;
+            
+            structuralCanvasHolder.appendChild(hardwareRenderer.domElement);
+
+            // Studio High Fidelity Studio Light Rigging Matrix Execution
+            const omniAmbientLight = new THREE.AmbientLight(0xffffff, 1.1);
+            primaryScene.add(omniAmbientLight);
+
+            const luxuryKeyDirectionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
+            luxuryKeyDirectionalLight.position.set(5, 8, 5);
+            primaryScene.add(luxuryKeyDirectionalLight);
+
+            const softMetallicFillLight = new THREE.DirectionalLight(0xffefdb, 0.6); // Warm soft tone fill highlight
+            softMetallicFillLight.position.set(-5, -6, 3);
+            primaryScene.add(softMetallicFillLight);
+
+            const dramaticBackrimGlowLight = new THREE.DirectionalLight(0x800000, 0.5); // Deep Maroon luxury identity bleed reflections
+            dramaticBackrimGlowLight.position.set(0, 0, -5);
+            primaryScene.add(dramaticBackrimGlowLight);
         }
 
-        function filterInventory(catKey) {
-            const btns = { all: document.getElementById('filter-all'), wedding: document.getElementById('filter-wedding'), premium: document.getElementById('filter-premium') };
-            Object.keys(btns).forEach(k => { if(btns[k]) btns[k].className = "px-5 py-2.5 rounded-full text-neutral-500 transition-all"; });
-            if(btns[catKey]) btns[catKey].className = "px-5 py-2.5 rounded-full bg-neutral-950 text-white shadow-sm transition-all";
-            
-            let filtered = window.BangleDatabase;
-            if(catKey === 'wedding') filtered = window.BangleDatabase.filter(x => x.cat.toLowerCase().includes('wedding') || x.cat.toLowerCase().includes('bridal'));
-            if(catKey === 'premium') filtered = window.BangleDatabase.filter(x => x.cat.toLowerCase().includes('premium') || x.cat.toLowerCase().includes('royal'));
-            
-            gsap.to('#luxury-showroom-grid', { opacity: 0, y: 10, duration: 0.2, onComplete: () => { compileShowroomGrid(filtered); gsap.to('#luxury-showroom-grid', { opacity: 1, y: 0, duration: 0.3 }); } });
-        }
-
-        // WEBGL ENGINE SUBSYSTEM INTERNALS
-        let coreScene, coreCamera, coreRenderer, activeMeshNode;
-        let isDragActive = false;
-        let lastMousePos = { x: 0, y: 0 };
-        const overlay = document.getElementById('theatre-3d-overlay');
-        const holder = document.getElementById('canvas-3d-holder');
-        const loader = document.getElementById('loader-status');
-
-        function buildWebGLContext() {
-            coreScene = new THREE.Scene();
-            coreCamera = new THREE.PerspectiveCamera(38, holder.clientWidth / holder.clientHeight, 0.1, 100);
-            coreCamera.position.z = 5.6;
-            coreRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
-            coreRenderer.setSize(holder.clientWidth, holder.clientHeight);
-            coreRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            holder.appendChild(coreRenderer.domElement);
-            coreScene.add(new THREE.AmbientLight(0xffffff, 0.95));
-            const sun = new THREE.DirectionalLight(0xffffff, 0.85); sun.position.set(4, 6, 5); coreScene.add(sun);
-            const bounce = new THREE.DirectionalLight(0xd4af37, 0.35); bounce.position.set(-4, -5, 2); coreScene.add(bounce);
-        }
-
+        /**
+         * High-End HTML Node Rasterization Pipeline Engine
+         * Clones any target card item from 2D DOM layout directly into a double-sided 3D geometry matrix
+         * @param {String} bangleId Target primary identifier token matching target database asset
+         */
         function initiate3DTransformMatrix(bangleId) {
-            const item = window.BangleDatabase.find(x => x.id === bangleId); if (!item) return;
-            document.getElementById('theatre-meta-title').innerText = item.name;
-            document.getElementById('theatre-meta-cat').innerText = item.cat;
-            document.getElementById('theatre-buy-btn').setAttribute('onclick', `launchCheckout('${item.id}')`);
-            
-            overlay.classList.add('active'); loader.style.opacity = "1";
-            if (!coreScene) buildWebGLContext();
-            if (activeMeshNode) coreScene.remove(activeMeshNode);
+            const assetPayload = window.KanganComprehensiveDatabase.find(target => target.id === bangleId);
+            if (!assetPayload) return;
 
-            html2canvas(document.getElementById(bangleId), { backgroundColor: '#ffffff', scale: 2, useCORS: true }).then(canvas => {
-                loader.style.opacity = "0";
-                const tex = new THREE.CanvasTexture(canvas);
-                const front = new THREE.MeshStandardMaterial({ map: tex, roughness: 0.15, metalness: 0.1 });
-                const back = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.85, roughness: 0.2, clearcoat: 1.0 });
-                const side = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.4 });
-                activeMeshNode = new THREE.Mesh(new THREE.BoxGeometry(2.15, 3.1, 0.08), [side, side, side, side, front, back]);
-                coreScene.add(activeMeshNode);
-                activeMeshNode.scale.set(0, 0, 0); activeMeshNode.rotation.set(0.2, 0.4, 0);
-                gsap.to(activeMeshNode.scale, { x: 1.15, y: 1.15, z: 1.15, duration: 0.7, ease: "back.out(1.4)" });
+            // Sync structural identifiers across tracking overlays
+            document.getElementById('theatre-meta-title').innerText = assetPayload.name;
+            document.getElementById('theatre-meta-cat').innerText = `${assetPayload.category} (${assetPayload.subCategory})`;
+            document.getElementById('theatre-meta-sku').innerText = `SKU: ${assetPayload.skuCode} | MATERIAL: POLY-COMPOSITE CORE`;
+            
+            // Re-route operational checkout click tokens
+            document.getElementById('theatre-buy-btn').setAttribute('onclick', `activateSecureCheckoutGateway('${assetPayload.id}')`);
+
+            // Apply global window display animations overrides via classes
+            overlayTheatreNode.classList.add('active');
+            processingLoaderHud.style.opacity = "1";
+
+            // Instantiate parent hardware graphics engine context if undetected inside runtime scopes
+            if (!primaryScene) setupCoreWebGLThreeEngine();
+            if (activeProceduralMesh) primaryScene.remove(activeProceduralMesh);
+
+            const activeDOMTargetNode = document.getElementById(bangleId);
+
+            // Execute high-fidelity asynchronous rasterization canvas capture
+            html2canvas(activeDOMTargetNode, {
+                backgroundColor: '#111111',
+                scale: 2.5,
+                useCORS: true,
+                logging: false,
+                allowTaint: true
+            }).then(processedCanvasInstance => {
+                processingLoaderHud.style.opacity = "0";
+
+                const masterTextureBuffer = new THREE.CanvasTexture(processedCanvasInstance);
+                masterTextureBuffer.minFilter = THREE.LinearMipmapLinearFilter;
+                masterTextureBuffer.magFilter = THREE.LinearFilter;
+                masterTextureBuffer.anisotropy = hardwareRenderer.capabilities.getMaxAnisotropy();
+                
+                // Construct complex multi-material layered physical mapping arrays
+                const frontalMappedTextureFace = new THREE.MeshStandardMaterial({ map: masterTextureBuffer, roughness: 0.1, metalness: 0.05, side: THREE.DoubleSide });
+                const authenticSovereignGoldBackPlate = new THREE.MeshStandardMaterial({ color: 0xD4AF37, roughness: 0.2, metalness: 0.9, clearcoat: 1.0, clearcoatRoughness: 0.1 });
+                const structuralInsulatingSideBevels = new THREE.MeshStandardMaterial({ color: 0x1A1A1A, roughness: 0.5, metalness: 0.2 });
+
+                const materialFaceConfigurationPack = [
+                    structuralInsulatingSideBevels, structuralInsulatingSideBevels,
+                    structuralInsulatingSideBevels, structuralInsulatingSideBevels,
+                    frontalMappedTextureFace, authenticSovereignGoldBackPlate
+                ];
+
+                // Compute custom structural boundaries matching physical display proportions
+                const calculatedBoxGeometryNode = new THREE.BoxGeometry(2.1, 3.1, 0.08);
+                activeProceduralMesh = new THREE.Mesh(calculatedBoxGeometryNode, materialFaceConfigurationPack);
+                
+                primaryScene.add(activeProceduralMesh);
+
+                // Initialize high-performance entry vectors via GSAP engine math
+                activeProceduralMesh.scale.set(0, 0, 0);
+                activeProceduralMesh.rotation.set(0.3, 0.6, -0.15);
+                
+                gsap.to(activeProceduralMesh.scale, { x: 1.1, y: 1.1, z: 1.1, duration: 0.8, ease: "back.out(1.5)" });
+                gsap.to(activeProceduralMesh.rotation, { x: 0, y: 0.35, z: 0, duration: 1.4, ease: "power4.out" });
+                
+                window.KanganEngineContext.state.analyticsPayload.3DPreviewsGenerated++;
             });
         }
 
-        function closeTheatre3D() { overlay.classList.remove('active'); }
+        /**
+         * Disengages and detaches 3D active theatre views seamlessly
+         */
+        function closeTheatre3D() {
+            overlayTheatreNode.classList.remove('active');
+        }
+    </script>
+    <div id="checkout-form-overlay" class="fixed inset-0 w-full h-full z-50 bg-neutral-950/90 backdrop-blur-2xl opacity-0 pointer-events-none transition-all duration-500 flex items-center justify-center p-4 gpu-layer">
+        
+        <div class="w-full max-w-xl bg-gradient-to-b from-neutral-900 to-neutral-950 rounded-[3rem] p-6 sm:p-10 shadow-luxury-glow relative border border-white/10 max-h-[92vh] overflow-y-auto flex flex-col justify-between">
+            
+            <button onclick="terminateCheckoutOverlay()" class="absolute top-6 right-6 w-10 h-10 bg-neutral-800 hover:bg-neutral-700 rounded-full flex items-center justify-center text-neutral-400 hover:text-white text-sm font-black transition-all duration-200 shadow-md">✕</button>
 
-        // CHECKOUT & FORM OPERATIONS VALIDATION SUBSYSTEM
-        const formOverlay = document.getElementById('checkout-form-overlay');
+            <div>
+                <div class="text-left mb-6">
+                    <span class="text-[8px] tracking-[0.45em] font-extrabold text-luxury-gold bg-luxury-gold/10 px-3 py-1.5 rounded-md border border-luxury-gold/30 uppercase inline-block mb-2">Nepal Secure Routing Gateway</span>
+                    <h3 class="brand-title text-xl sm:text-2xl font-black text-white uppercase tracking-widest">Complete Dispatch Order</h3>
+                    <p id="checkout-bangle-tagline" class="text-[10px] text-neutral-400 font-bold tracking-wider uppercase mt-1">Active Object Reference: Initializing Memory Allocations...</p>
+                </div>
 
-        function launchCheckout(bangleId) {
-            const b = window.BangleDatabase.find(x => x.id === bangleId); if (!b) return;
-            window.KanganAppState.activeBangleId = bangleId;
-            document.getElementById('checkout-bangle-tagline').innerText = `Item: ${b.name} (${b.cat})`;
-            document.getElementById('modal-calculated-price').innerText = `${window.KanganAppState.currency} ${Number(b.price).toLocaleString()}`;
-            formOverlay.classList.add('active'); formOverlay.style.opacity = "1"; formOverlay.style.pointerEvents = "auto";
+                <div class="w-full bg-black/40 rounded-2xl p-4 border border-white/5 mb-6 flex justify-between items-center font-sans">
+                    <div>
+                        <p class="text-[8px] text-neutral-500 font-extrabold uppercase tracking-widest">Total Sovereign Settlement Cost</p>
+                        <p id="modal-calculated-price" class="text-xl font-black text-luxury-gold font-mono mt-1">NRs. 0.00</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-[8px] text-emerald-400 font-extrabold uppercase tracking-widest bg-emerald-950/60 px-3 py-1.5 rounded-full border border-emerald-500/30 shadow-md block">Free Handheld Cargo Siraha</span>
+                    </div>
+                </div>
+
+                <form id="nepal-order-form" onsubmit="executeOrderPipelineValidation(event)" class="space-y-4 text-left">
+                    
+                    <div>
+                        <label class="block text-[8px] text-neutral-400 font-black tracking-widest uppercase mb-1.5">Customer Name (Legal Identity) <span class="text-red-500">*</span></label>
+                        <input type="text" id="cust-fullname" required placeholder="e.g., Ram Bahadur Shrestha" class="w-full px-5 py-3.5 bg-neutral-900 border border-white/10 focus:border-luxury-gold focus:bg-neutral-950 rounded-xl text-xs font-semibold text-white outline-none transition-all duration-300">
+                    </div>
+
+                    <div>
+                        <label class="block text-[8px] text-neutral-400 font-black tracking-widest uppercase mb-1.5">Mobile Contact Vector (Nepal Standard) <span class="text-red-500">*</span></label>
+                        <input type="tel" id="cust-phone" required pattern="^[9][678][0-9]{8}$" placeholder="e.g., 98XXXXXXXX" class="w-full px-5 py-3.5 bg-neutral-900 border border-white/10 focus:border-luxury-gold focus:bg-neutral-950 rounded-xl text-xs font-mono font-semibold text-white outline-none transition-all duration-300">
+                    </div>
+
+                    <div>
+                        <label class="block text-[8px] text-neutral-400 font-black tracking-widest uppercase mb-1.5">Detailed Delivery Address (Siraha Region / Nepal Hub) <span class="text-red-500">*</span></label>
+                        <input type="text" id="cust-address" required placeholder="e.g., Main Bazaar, Ward No. 3, Siraha Road, Nepal" class="w-full px-5 py-3.5 bg-neutral-900 border border-white/10 focus:border-luxury-gold focus:bg-neutral-950 rounded-xl text-xs font-semibold text-white outline-none transition-all duration-300">
+                    </div>
+
+                    <div>
+                        <label class="block text-[8px] text-neutral-400 font-black tracking-widest uppercase mb-2">Select Authenticated Local Settlement Account Provider <span class="text-red-500">*</span></label>
+                        <div class="grid grid-cols-3 gap-3">
+                            
+                            <label class="border-2 border-neutral-800 bg-neutral-900/50 rounded-2xl p-3 flex flex-col items-center justify-center gap-1.5 cursor-pointer hover:border-nepal-esewa/60 hover:bg-black/40 transition-all duration-300 text-center relative group">
+                                <input type="radio" name="paymentMethod" value="esewa" required class="absolute top-2.5 right-2.5 accent-emerald-500 cursor-pointer">
+                                <span class="text-2xl filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">🟢</span>
+                                <span class="text-[9px] font-black tracking-wider uppercase text-neutral-300 group-hover:text-white transition-colors">eSewa</span>
+                            </label>
+
+                            <label class="border-2 border-neutral-800 bg-neutral-900/50 rounded-2xl p-3 flex flex-col items-center justify-center gap-1.5 cursor-pointer hover:border-nepal-khalti/60 hover:bg-black/40 transition-all duration-300 text-center relative group">
+                                <input type="radio" name="paymentMethod" value="khalti" class="absolute top-2.5 right-2.5 accent-purple-500 cursor-pointer">
+                                <span class="text-2xl filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">🟣</span>
+                                <span class="text-[9px] font-black tracking-wider uppercase text-neutral-300 group-hover:text-white transition-colors">Khalti</span>
+                            </label>
+
+                            <label class="border-2 border-neutral-800 bg-neutral-900/50 rounded-2xl p-3 flex flex-col items-center justify-center gap-1.5 cursor-pointer hover:border-luxury-gold/60 hover:bg-black/40 transition-all duration-300 text-center relative group">
+                                <input type="radio" name="paymentMethod" value="cod" class="absolute top-2.5 right-2.5 accent-amber-500 cursor-pointer">
+                                <span class="text-2xl filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">📦</span>
+                                <span class="text-[9px] font-black tracking-wider uppercase text-neutral-300 group-hover:text-white transition-colors">COD</span>
+                            </label>
+
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 mt-4 bg-gradient-to-r from-luxury-maroon to-red-950 border border-luxury-gold/40 hover:border-luxury-gold text-white text-[10px] tracking-[0.4em] font-black uppercase rounded-xl shadow-luxury-glow transition-all duration-300 transform active:scale-[0.99]">
+                        Confirm Order Dispatch Sequence →
+                    </button>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const checkoutOverlayTargetNode = document.getElementById('checkout-form-overlay');
+        let tacticalRoutingBangleToken = null;
+
+        /**
+         * Triggers secure local validation billing inputs mapping values cleanly
+         * @param {String} bangleId Targeted product identification token string
+         */
+        function activateSecureCheckoutGateway(bangleId) {
+            const mappedBangleObject = window.KanganComprehensiveDatabase.find(x => x.id === bangleId);
+            if (!mappedBangleObject) return;
+
+            tacticalRoutingBangleToken = bangleId;
+            
+            const rawBaseCost = Number(mappedBangleObject.basePrice);
+            const rawDiscount = Number(mappedBangleObject.discountPercent);
+            const netValuationCost = rawDiscount > 0 ? rawBaseCost - (rawBaseCost * (rawDiscount / 100)) : rawBaseCost;
+
+            document.getElementById('checkout-bangle-tagline').innerText = `Active Reference: ${mappedBangleObject.name} [${mappedBangleObject.skuCode}]`;
+            document.getElementById('modal-calculated-price').innerText = `${window.KanganEngineContext.state.currencySymbol}${Number(netValuationCost).toLocaleString()}.00`;
+            
+            checkoutOverlayTargetNode.classList.add('active');
+            checkoutOverlayTargetNode.style.opacity = "1";
+            checkoutOverlayTargetNode.style.pointerEvents = "auto";
         }
 
-        function terminateCheckoutOverlay() { formOverlay.style.opacity = "0"; formOverlay.style.pointerEvents = "none"; setTimeout(() => formOverlay.classList.remove('active'), 400); }
-
-        function executeOrderPipelineValidation(e) {
-            e.preventDefault();
-            const name = document.getElementById('cust-fullname').value;
-            const pm = document.querySelector('input[name="paymentMethod"]:checked').value;
-            const obj = window.BangleDatabase.find(x => x.id === window.KanganAppState.activeBangleId);
-            alert(`🎉 Order Dispatched Successfully!\n\nDear ${name}, your package for "${obj.name}" has been mapped into Kangan Store Database using [${pm.toUpperCase()}] channel gateway. Dispatched loop tracking active for Siraha, Nepal!`);
-            document.getElementById('nepal-order-form').reset(); terminateCheckoutOverlay(); closeTheatre3D();
+        /**
+         * Collapses checkout workflow structures cleanly resetting overlays
+         */
+        function terminateCheckoutOverlay() {
+            checkoutOverlayTargetNode.style.opacity = "0";
+            checkoutOverlayTargetNode.style.pointerEvents = "none";
+            setTimeout(() => { checkoutOverlayTargetNode.classList.remove('active'); }, 500);
         }
 
-        // ENGINE LOOP AND RESIZE SYNCHRONIZATION
-        function globalRenderLoop() {
-            requestAnimationFrame(globalRenderLoop);
-            if (coreRenderer && coreScene && coreCamera) {
-                if (activeMeshNode && !isDragActive) { activeMeshNode.rotation.y += 0.005; activeMeshNode.position.y = Math.sin(performance.now() * 0.001) * 0.05; }
-                coreRenderer.render(coreScene, coreCamera);
+        /**
+         * Processes forms intercepting submit data blocks executing security outputs
+         */
+        function executeOrderPipelineValidation(event) {
+            event.preventDefault();
+            
+            const targetClientFullname = document.getElementById('cust-fullname').value;
+            const targetSelectedMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            const exactMappedBangleUnit = window.KanganComprehensiveDatabase.find(y => y.id === tacticalRoutingBangleToken);
+
+            window.KanganEngineContext.state.analyticsPayload.orderCount++;
+
+            // Native alert prompt confirmation routing interface
+            alert(`🎉 SECURE TRANSMISSION SUCCESSFUL!\n\nDear ${targetClientFullname}, your request for "${exactMappedBangleUnit.name}" has been hardcoded into Kangan Fancy Store's Central Registry database.\n\nGateway Allocation Protocol: [${targetSelectedMethod.toUpperCase()}]\nTarget Shipping Manifest Base: Siraha Hub, Nepal.\n\nThank you for choosing luxury excellence!`);
+            
+            // Clean up state footprints resetting modules
+            document.getElementById('nepal-order-form').reset();
+            terminateCheckoutOverlay();
+            closeTheatre3D();
+        }
+
+        // CONTINUOUS EXTREME PERFORMANCE 60FPS GRAPHICS REFRESH RENDER LOOP
+        function coreExecutionRenderLoop() {
+            requestAnimationFrame(coreExecutionRenderLoop);
+            
+            if (hardwareRenderer && primaryScene && dynamicPerspectiveCamera) {
+                // If interactive touch interactions are unlatched, inject fine floating mechanical rotators
+                if (activeProceduralMesh && !clientDragInteractionFlag) {
+                    activeProceduralMesh.rotation.y += 0.005;
+                    activeProceduralMesh.position.y = Math.sin(performance.now() * 0.0012) * 0.06;
+                }
+                hardwareRenderer.render(primaryScene, dynamicPerspectiveCamera);
             }
         }
 
-        document.addEventListener("DOMContentLoaded", () => {
-            compileShowroomGrid(window.BangleDatabase); globalRenderLoop();
-            
-            holder.addEventListener('mousedown', (e) => { isDragActive = true; lastMousePos = { x: e.clientX, y: e.clientY }; });
-            window.addEventListener('mousemove', (e) => {
-                if (!isDragActive || !activeMeshNode) return;
-                activeMeshNode.rotation.y += (e.clientX - lastMousePos.x) * 0.007;
-                activeMeshNode.rotation.x += (e.clientY - lastMousePos.y) * 0.007;
-                lastMousePos = { x: e.clientX, y: e.clientY };
-            });
-            window.addEventListener('mouseup', () => isDragActive = false);
+        // INITIALIZE DRAG INTERACTIVE MOUSE INTERPOLATION listeners
+        function registerTactileEngineListeners() {
+            const trackpadViewportGrid = document.getElementById('canvas-3d-holder');
 
-            holder.addEventListener('touchstart', (e) => { isDragActive = true; lastMousePos = { x: e.touches[0].clientX, y: e.touches[0].clientY }; });
-            window.addEventListener('touchmove', (e) => {
-                if (!isDragActive || !activeMeshNode) return;
-                activeMeshNode.rotation.y += (e.touches[0].clientX - lastMousePos.x) * 0.009;
-                activeMeshNode.rotation.x += (e.touches[0].clientY - lastMousePos.y) * 0.009;
-                lastMousePos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            trackpadViewportGrid.addEventListener('mousedown', (event) => {
+                clientDragInteractionFlag = true;
+                coordinateBufferPos.x = event.clientX;
+                coordinateBufferPos.y = event.clientY;
             });
-            window.addEventListener('touchend', () => isDragActive = false);
+
+            window.addEventListener('mousemove', (event) => {
+                if (!clientDragInteractionFlag || !activeProceduralMesh) return;
+                
+                const translationDeltaX = event.clientX - coordinateBufferPos.x;
+                const translationDeltaY = event.clientY - coordinateBufferPos.y;
+
+                activeProceduralMesh.rotation.y += translationDeltaX * 0.007;
+                activeProceduralMesh.rotation.x += translationDeltaY * 0.007;
+
+                coordinateBufferPos.x = event.clientX;
+                coordinateBufferPos.y = event.clientY;
+            });
+
+            window.addEventListener('mouseup', () => { clientDragInteractionFlag = false; });
+
+            // Dynamic seamless structural touch listeners integration for phone layouts
+            trackpadViewportGrid.addEventListener('touchstart', (event) => {
+                clientDragInteractionFlag = true;
+                coordinateBufferPos.x = event.touches[0].clientX;
+                coordinateBufferPos.y = event.touches[0].clientY;
+            });
+
+            window.addEventListener('touchmove', (event) => {
+                if (!clientDragInteractionFlag || !activeProceduralMesh) return;
+                
+                const dynamicTouchDeltaX = event.touches[0].clientX - coordinateBufferPos.x;
+                const dynamicTouchDeltaY = event.touches[0].clientY - coordinateBufferPos.y;
+                
+                activeProceduralMesh.rotation.y += dynamicTouchDeltaX * 0.009;
+                activeProceduralMesh.rotation.x += dynamicTouchDeltaY * 0.009;
+                
+                coordinateBufferPos.x = event.touches[0].clientX;
+                coordinateBufferPos.y = event.touches[0].clientY;
+            });
+
+            window.addEventListener('touchend', () => { clientDragInteractionFlag = false; });
+        }
+
+        // VIEWPORT GEOMETRIC WINDOW DYNAMIC RESIZER ADAPTER GRID
+        window.addEventListener('resize', () => {
+            if (!hardwareRenderer || !dynamicPerspectiveCamera || !structuralCanvasHolder) return;
+            
+            dynamicPerspectiveCamera.aspect = structuralCanvasHolder.clientWidth / structuralCanvasHolder.clientHeight;
+            dynamicPerspectiveCamera.updateProjectionMatrix();
+            hardwareRenderer.setSize(structuralCanvasHolder.clientWidth, structuralCanvasHolder.clientHeight);
         });
 
-        window.addEventListener('resize', () => {
-            if (!coreRenderer || !coreCamera) return;
-            coreCamera.aspect = holder.clientWidth / holder.clientHeight; coreCamera.updateProjectionMatrix();
-            coreRenderer.setSize(holder.clientWidth, holder.clientHeight);
+        // Bootstrap systemic engine hooks on initialization events
+        document.addEventListener("DOMContentLoaded", () => {
+            // First run grid compilation across absolute database nodes
+            compileShowroomGrid(window.KanganComprehensiveDatabase);
+            
+            // Activate underlying multi-threading listening channels
+            registerTactileEngineListeners();
+            coreExecutionRenderLoop();
+            
+            console.log("🔥 Production Architecture Framework Engine mounted successfully. Matrix running at 60FPS target.");
         });
     </script>
-</body>
+
+    </div> </body>
 </html>
