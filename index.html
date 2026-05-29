@@ -3,26 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kangan Fancy Store - Ultimate 3D Experience</title>
+    <title>Kangan Fancy Store | Ultimate 3D Multi-Universe</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- GSAP for Mind-Blowing Animations -->
+    <!-- GSAP for Ultra Smooth Engine -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <style>
-        body {
-            background-color: #800000; /* Deep Maroon */
-            color: #D4AF37; /* Gold */
-            font-family: 'Georgia', serif;
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
             overflow-x: hidden;
-        }
-        .gold-border {
-            border: 2px solid #D4AF37;
-        }
-        .content-layer {
-            position: relative;
-            z-index: 2;
+            font-family: 'Cinzel', 'Georgia', serif;
+            background-color: #4a0000;
+            transition: background 1.5s ease-in-out;
         }
         #canvas-container {
             position: fixed;
@@ -31,226 +28,249 @@
             width: 100%;
             height: 100%;
             z-index: 1;
+        }
+        .ui-layer {
+            position: relative;
+            z-index: 2;
             pointer-events: none;
         }
-        .product-card {
-            background: rgba(60, 0, 0, 0.65);
-            backdrop-filter: blur(12px);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        .interactive {
+            pointer-events: auto;
         }
-        .product-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.4);
-            background: rgba(90, 0, 0, 0.8);
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
         }
-        /* Entrance animation class */
-        .reveal-effect {
-            opacity: 0;
-            transform: translateY(30px);
+        .glass-card:hover {
+            border: 1px solid rgba(212, 175, 55, 0.8);
+            box-shadow: 0 20px 50px rgba(212, 175, 55, 0.2);
+            transform: scale(1.05);
+        }
+        /* Active item glowing effect */
+        .active-card {
+            border: 2px solid #D4AF37 !important;
+            background: rgba(212, 175, 55, 0.1) !important;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+        }
+        .text-gaze {
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
         }
     </style>
 </head>
-<body>
+<body class="bg-gradient-to-br from-[#500000] to-[#200000]">
 
-    <!-- 3D Magical Background -->
+    <!-- Full Screen 3D Render Canvas -->
     <div id="canvas-container"></div>
 
-    <div class="content-layer min-h-screen flex flex-col">
-        <!-- Luxury Header -->
-        <header class="border-b border-[#D4AF37] p-8 text-center bg-black/50 backdrop-blur-md reveal-effect" id="header">
-            <h1 class="text-4xl md:text-6xl font-bold tracking-widest uppercase mb-2">Kangan Fancy Store</h1>
-            <p class="text-sm italic tracking-widest text-yellow-100/80">Siraha, Nepal — Finest Cosmetics & Bridal Jewelry</p>
+    <!-- UI Overlay Layer -->
+    <div class="ui-layer min-h-screen flex flex-col justify-between p-6 md:p-12">
+        
+        <!-- Header: Flying 3D Entrance -->
+        <header class="w-full text-center md:text-left flex flex-col md:flex-row justify-between items-center border-b border-white/10 pb-6 backdrop-blur-sm px-6 rounded-xl">
+            <div>
+                <h1 id="brand-logo" class="text-4xl md:text-6xl font-black tracking-widest text-[#D4AF37] text-gaze uppercase opacity-0 transform -translate-y-10">Kangan Fancy Store</h1>
+                <p id="brand-sub" class="text-xs md:text-sm tracking-widest text-white/60 uppercase mt-2 opacity-0">Siraha, Nepal — Next-Gen 3D Luxury Showroom</p>
+            </div>
+            <div id="payment-tags" class="mt-4 md:mt-0 flex gap-4 text-[10px] tracking-wider text-[#D4AF37] font-bold opacity-0">
+                <span class="px-3 py-1 border border-[#D4AF37]/30 rounded">eSewa</span>
+                <span class="px-3 py-1 border border-[#D4AF37]/30 rounded">Khalti</span>
+                <span class="px-3 py-1 border border-[#D4AF37]/30 rounded">COD</span>
+            </div>
         </header>
 
-        <!-- Main Grid Area -->
-        <main class="flex-grow container mx-auto px-6 py-12">
-            <h2 class="text-xl md:text-2xl font-light text-center mb-16 tracking-widest uppercase text-white/90 reveal-effect" id="title">
-                ✨ Tap Any Item to Experience Match-Shape 3D Animation ✨
+        <!-- Dynamic Middle Showcase Banner -->
+        <div class="w-full text-center my-auto py-8">
+            <h2 id="interactive-title" class="text-2xl md:text-4xl font-light tracking-[0.3em] uppercase text-white opacity-0">
+                Tap a Universe Below
             </h2>
+        </div>
+
+        <!-- Horizontal 3D Controller Cards -->
+        <footer class="w-full max-w-6xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-6 interactive">
             
-            <!-- Grid Items -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                
-                <!-- Item 1: Velvet Bangles -->
-                <div class="product-card gold-border rounded-xl p-6 flex flex-col justify-between cursor-pointer reveal-effect" onclick="change3DObject('bangles')">
-                    <div>
-                        <div class="w-full h-44 bg-black/40 rounded-lg mb-4 flex items-center justify-center text-6xl shadow-inner">💫</div>
-                        <h3 class="text-2xl font-semibold tracking-wide mb-2 text-white">Velvet Bangles</h3>
-                        <p class="text-gray-300 text-sm leading-relaxed">Luxury soft velvet finish matching traditional bridal style.</p>
-                    </div>
-                    <div class="mt-6 flex justify-between items-center border-t border-gold/20 pt-4">
-                        <span class="text-xl font-bold tracking-wider text-yellow-300">Rs. 1,200</span>
-                        <span class="text-xs font-semibold bg-[#D4AF37] text-[#800000] px-3 py-1.5 rounded-full uppercase tracking-wider">3D Ring Effect</span>
-                    </div>
+            <!-- Universe 1: Bangles -->
+            <div id="card-bangles" class="glass-card active-card rounded-2xl p-5 cursor-pointer flex flex-col justify-between text-left" onclick="switchUniverse('bangles', '#800000', '#300000', 0xD4AF37)">
+                <div>
+                    <div class="text-3xl mb-2">💫</div>
+                    <h3 class="text-lg font-bold text-white tracking-wide">Velvet Bangles</h3>
+                    <p class="text-white/50 text-xs mt-1">Maroon Luxury Ring Mode</p>
                 </div>
-
-                <!-- Item 2: Matte Lipstick -->
-                <div class="product-card gold-border rounded-xl p-6 flex flex-col justify-between cursor-pointer reveal-effect" onclick="change3DObject('lipstick')">
-                    <div>
-                        <div class="w-full h-44 bg-black/40 rounded-lg mb-4 flex items-center justify-center text-6xl shadow-inner">💄</div>
-                        <h3 class="text-2xl font-semibold tracking-wide mb-2 text-white">Matte Lipstick</h3>
-                        <p class="text-gray-300 text-sm leading-relaxed">Super long-lasting vibrant matte shades for premium bridal touch.</p>
-                    </div>
-                    <div class="mt-6 flex justify-between items-center border-t border-gold/20 pt-4">
-                        <span class="text-xl font-bold tracking-wider text-yellow-300">Rs. 850</span>
-                        <span class="text-xs font-semibold bg-[#D4AF37] text-[#800000] px-3 py-1.5 rounded-full uppercase tracking-wider">3D Cylinder Flip</span>
-                    </div>
-                </div>
-
-                <!-- Item 3: Bridal Chura -->
-                <div class="product-card gold-border rounded-xl p-6 flex flex-col justify-between cursor-pointer reveal-effect" onclick="change3DObject('chura')">
-                    <div>
-                        <div class="w-full h-44 bg-black/40 rounded-lg mb-4 flex items-center justify-center text-6xl shadow-inner">👑</div>
-                        <h3 class="text-2xl font-semibold tracking-wide mb-2 text-white">Bridal Chura</h3>
-                        <p class="text-gray-300 text-sm leading-relaxed">Heavy traditional royal chura set exclusively curated for brides.</p>
-                    </div>
-                    <div class="mt-6 flex justify-between items-center border-t border-gold/20 pt-4">
-                        <span class="text-xl font-bold tracking-wider text-yellow-300">Rs. 4,500</span>
-                        <span class="text-xs font-semibold bg-[#D4AF37] text-[#800000] px-3 py-1.5 rounded-full uppercase tracking-wider">3D Mega Crown</span>
-                    </div>
-                </div>
-
-                <!-- Item 4: Gold-plated Jhumkas -->
-                <div class="product-card gold-border rounded-xl p-6 flex flex-col justify-between cursor-pointer reveal-effect" onclick="change3DObject('jhumka')">
-                    <div>
-                        <div class="w-full h-44 bg-black/40 rounded-lg mb-4 flex items-center justify-center text-6xl shadow-inner">✨</div>
-                        <h3 class="text-2xl font-semibold tracking-wide mb-2 text-white">Gold Jhumkas</h3>
-                        <p class="text-gray-300 text-sm leading-relaxed">Classic Nepalese luxury gold-plated jhumkas with precision details.</p>
-                    </div>
-                    <div class="mt-6 flex justify-between items-center border-t border-gold/20 pt-4">
-                        <span class="text-xl font-bold tracking-wider text-yellow-300">Rs. 2,400</span>
-                        <span class="text-xs font-semibold bg-[#D4AF37] text-[#800000] px-3 py-1.5 rounded-full uppercase tracking-wider">3D Sphere Spin</span>
-                    </div>
-                </div>
-
+                <div class="text-[#D4AF37] font-bold text-sm mt-4">Rs. 1,200</div>
             </div>
-        </main>
 
-        <!-- Payment Badges Footer -->
-        <footer class="border-t border-[#D4AF37] p-6 bg-black/40 text-center text-xs tracking-widest uppercase reveal-effect" id="footer">
-            <div class="mb-4 flex justify-center gap-8 font-bold text-yellow-400">
-                <span>eSewa</span>
-                <span>Khalti</span>
-                <span>Mobile Banking</span>
-                <span>Cash On Delivery</span>
+            <!-- Universe 2: Lipstick -->
+            <div id="card-lipstick" class="glass-card rounded-2xl p-5 cursor-pointer flex flex-col justify-between text-left" onclick="switchUniverse('lipstick', '#103050', '#051020', 0x00E5FF)">
+                <div>
+                    <div class="text-3xl mb-2">💄</div>
+                    <h3 class="text-lg font-bold text-white tracking-wide">Matte Lipstick</h3>
+                    <p class="text-white/50 text-xs mt-1">Neon Cyan Matrix Mode</p>
+                </div>
+                <div class="text-[#00E5FF] font-bold text-sm mt-4">Rs. 850</div>
             </div>
-            <p class="text-gray-400 normal-case tracking-normal">&copy; 2026 Kangan Fancy Store, Siraha, Nepal. All Rights Reserved.</p>
+
+            <!-- Universe 3: Chura -->
+            <div id="card-chura" class="glass-card rounded-2xl p-5 cursor-pointer flex flex-col justify-between text-left" onclick="switchUniverse('chura', '#2d0a4e', '#120224', 0xE0115F)">
+                <div>
+                    <div class="text-3xl mb-2">👑</div>
+                    <h3 class="text-lg font-bold text-white tracking-wide">Bridal Chura</h3>
+                    <p class="text-white/50 text-xs mt-1">Royal Ruby Crown Mode</p>
+                </div>
+                <div class="text-[#E0115F] font-bold text-sm mt-4">Rs. 4,500</div>
+            </div>
+
+            <!-- Universe 4: Jhumkas -->
+            <div id="card-jhumka" class="glass-card rounded-2xl p-5 cursor-pointer flex flex-col justify-between text-left" onclick="switchUniverse('jhumka', '#0b3d1c', '#031408', 0xFFD700)">
+                <div>
+                    <div class="text-3xl mb-2">✨</div>
+                    <h3 class="text-lg font-bold text-white tracking-wide">Gold Jhumkas</h3>
+                    <p class="text-white/50 text-xs mt-1">Emerald Golden Sphere Mode</p>
+                </div>
+                <div class="text-[#FFD700] font-bold text-sm mt-4">Rs. 2,400</div>
+            </div>
+
         </footer>
     </div>
 
-    <!-- Interactive Engine Script -->
+    <!-- 3D Engine Architecture Script -->
     <script>
-        // Setup Three.js Space
+        // Init Three.js Environment
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 4.5;
+        camera.position.set(0, 0, 4);
 
-        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         container.appendChild(renderer.domElement);
 
-        // Core Materials
-        const luxuryMaterial = new THREE.MeshStandardMaterial({
-            color: 0xD4AF37, // Royal Gold
-            metalness: 0.95,
-            roughness: 0.15,
+        // Particle Galaxy Creation (A to Z Background 3D)
+        const starsGeometry = new THREE.BufferGeometry();
+        const starsCount = 1500;
+        const starPositions = new Float32Array(starsCount * 3);
+
+        for(let i=0; i < starsCount * 3; i++) {
+            starPositions[i] = (Math.random() - 0.5) * 10;
+        }
+        starsGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+        const starsMaterial = new THREE.PointsMaterial({ size: 0.015, color: 0xffffff, transparent: true, opacity: 0.8 });
+        const starGalaxy = new THREE.Points(starsGeometry, starsMaterial);
+        scene.add(starGalaxy);
+
+        // Dynamic Materials
+        const coreMaterial = new THREE.MeshStandardMaterial({
+            color: 0xD4AF37,
+            metalness: 1,
+            roughness: 0.1,
             wireframe: true
         });
 
-        // Shape Geometries matching products
-        const shapes = {
-            welcome: new THREE.TorusKnotGeometry(1, 0.35, 150, 16), // Intro Shape
-            bangles: new THREE.TorusGeometry(0.9, 0.25, 16, 100),   // Ring Shape like a Bangle
-            lipstick: new THREE.CylinderGeometry(0.4, 0.4, 1.8, 32, 4, true), // Stick Shape
-            chura: new THREE.TorusKnotGeometry(0.8, 0.4, 80, 8),    // Complex Crown Shape
-            jhumka: new THREE.SphereGeometry(0.9, 24, 24)           // Hanging Sphere Shape
+        // Shape Geometry Library
+        const geometries = {
+            bangles: new THREE.TorusGeometry(1, 0.3, 32, 100),
+            lipstick: new THREE.CylinderGeometry(0.5, 0.5, 2, 32, 10),
+            chura: new THREE.TorusKnotGeometry(0.8, 0.3, 150, 20, 3, 4),
+            jhumka: new THREE.IcosahedronGeometry(1.1, 2)
         };
 
-        // Create initial Mesh
-        let currentMesh = new THREE.Mesh(shapes.welcome, luxuryMaterial);
-        scene.add(currentMesh);
+        // Spawn Initial Object
+        let mainObject = new THREE.Mesh(geometries.bangles, coreMaterial);
+        scene.add(mainObject);
 
-        // Lighting System
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+        // Ultimate Studio Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
         scene.add(ambientLight);
 
-        const pointLight1 = new THREE.PointLight(0xffffff, 1.5);
-        pointLight1.position.set(5, 5, 5);
-        scene.add(pointLight1);
+        const light1 = new THREE.PointLight(0xffffff, 2);
+        light1.position.set(3, 4, 5);
+        scene.add(light1);
 
-        const pointLight2 = new THREE.PointLight(0xffd700, 1); // Gold reflection light
-        pointLight2.position.set(-5, -5, 3);
-        scene.add(pointLight2);
+        const light2 = new THREE.PointLight(0xD4AF37, 1.5);
+        light2.position.set(-3, -4, 3);
+        scene.add(light2);
 
-        // Smooth continuous passive rotation
-        function animate() {
-            requestAnimationFrame(animate);
-            if(currentMesh) {
-                currentMesh.rotation.x += 0.002;
-                currentMesh.rotation.y += 0.004;
+        // Core Render Animation Loop
+        let clock = new THREE.Clock();
+        function renderLoop() {
+            requestAnimationFrame(renderLoop);
+            const elapsedTime = clock.getElapsedTime();
+
+            // Passive Cinematic Motion
+            if(mainObject) {
+                mainObject.rotation.y = elapsedTime * 0.4;
+                mainObject.rotation.x = elapsedTime * 0.2;
+                mainObject.position.y = Math.sin(elapsedTime) * 0.1; // Floating Effect
             }
+
+            // Galaxy Pulsation
+            starGalaxy.rotation.y = elapsedTime * 0.02;
+
             renderer.render(scene, camera);
         }
-        animate();
+        renderLoop();
 
-        // OPENING ENTRANCE ANIMATION (Website open hote hi full style popup)
+        // INTRO ENTRANCE ANIMATION (Website load hote hi cinematic entry)
         window.addEventListener('DOMContentLoaded', () => {
-            // GSAP 3D Drop Intro
-            gsap.from(currentMesh.scale, { x: 0, y: 0, z: 0, duration: 1.8, ease: "elastic.out(1, 0.5)" });
-            gsap.from(currentMesh.rotation, { x: 5, y: 5, duration: 2, ease: "power3.out" });
-
-            // Smoothly reveal text layers
-            gsap.to(".reveal-effect", {
-                opacity: 1,
-                y: 0,
-                duration: 1,
-                stagger: 0.15,
-                ease: "power4.out"
-            });
+            gsap.timeline()
+                .to("#brand-logo", { opacity: 1, y: 0, duration: 1, ease: "power4.out" })
+                .to("#brand-sub", { opacity: 1, duration: 0.8 }, "-=0.5")
+                .to("#payment-tags", { opacity: 1, duration: 0.8 }, "-=0.6")
+                .to("#interactive-title", { opacity: 1, y: 0, duration: 1 }, "-=0.4")
+                .from(mainObject.scale, { x: 0, y: 0, z: 0, duration: 2, ease: "elastic.out(1, 0.5)" }, "-=1.5");
         });
 
-        // DYNAMIC SHAPE AND CUSTOM MOTION CHANGE ON CLICK
-        function change3DObject(type) {
-            // Step 1: Shrink current object elegantly
-            gsap.to(currentMesh.scale, {
-                x: 0, y: 0, z: 0, 
-                duration: 0.3, 
-                ease: "power2.in",
-                onComplete: () => {
-                    // Step 2: Swap the core 3D structure to match the photo clicked
-                    currentMesh.geometry.dispose();
-                    currentMesh.geometry = shapes[type];
+        // UNIVERSE SWITCH ENGINE (Color + 3D Shape + Grid Customization)
+        function switchUniverse(type, colorGradStart, colorGradEnd, structureColor) {
+            
+            // 1. Update UI Active Glow
+            document.querySelectorAll('.glass-card').forEach(card => card.classList.remove('active-card'));
+            document.getElementById(`card-${type}`).classList.add('active-card');
 
-                    // Step 3: Grow back with custom shape-matched animations
-                    if (type === 'bangles') {
-                        // Bangle: Giant loop spin rotation
-                        gsap.to(currentMesh.scale, { x: 1.2, y: 1.2, z: 1.2, duration: 0.6, ease: "back.out(1.5)" });
-                        gsap.to(currentMesh.rotation, { x: "+=6.28", duration: 1.2, ease: "power2.out" });
-                    } 
-                    else if (type === 'lipstick') {
-                        // Lipstick: Fast side vertical cylindrical flips
-                        gsap.to(currentMesh.scale, { x: 1, y: 1, z: 1, duration: 0.5, ease: "elastic.out(1, 0.3)" });
-                        gsap.to(currentMesh.rotation, { y: "+=9.42", duration: 1, ease: "expo.out" });
-                    } 
-                    else if (type === 'chura') {
-                        // Chura: Breathing luxury pulse wave effect
-                        gsap.timeline()
-                            .to(currentMesh.scale, { x: 1.4, y: 1.4, z: 1.4, duration: 0.4, ease: "power3.out" })
-                            .to(currentMesh.rotation, { z: "+=3.14", y: "+=3.14", duration: 0.4 }, "<")
-                            .to(currentMesh.scale, { x: 1, y: 1, z: 1, duration: 0.4, ease: "power3.in" });
-                    } 
-                    else if (type === 'jhumka') {
-                        // Jhumka: Fast bouncy spherical vibration
-                        gsap.to(currentMesh.scale, { x: 1.1, y: 1.1, z: 1.1, duration: 0.5, ease: "bounce.out" });
-                        gsap.to(currentMesh.rotation, { x: "+=4.5", z: "-=4.5", duration: 1.5, ease: "elastic.out(1, 0.3)" });
-                    }
-                }
-            });
+            // 2. Transmute Background Multi-Color Universe Live
+            document.body.style.background = `linear-gradient(135deg, ${colorGradStart}, ${colorGradEnd})`;
+
+            // 3. Update Title text seamlessly
+            const titles = {
+                bangles: "💫 Velvet Bangles Showroom 💫",
+                lipstick: "💄 Matte Lipstick Dimension 💄",
+                chura: "👑 Royal Bridal Chura Universe 👑",
+                jhumka: "✨ Emerald Gold Jhumka Portal ✨"
+            };
+            gsap.to("#interactive-title", { opacity: 0, y: -10, duration: 0.2, onComplete: () => {
+                document.getElementById('interactive-title').innerText = titles[type];
+                document.getElementById('interactive-title').style.color = `#${structureColor.toString(16)}`;
+                gsap.to("#interactive-title", { opacity: 1, y: 0, duration: 0.4 });
+            }});
+
+            // 4. Heavy Hyper-Space 3D Morph Transition
+            gsap.timeline()
+                .to(mainObject.scale, { x: 0, y: 0, z: 0, duration: 0.4, ease: "power2.in" })
+                .to(camera.position, { z: 1.5, duration: 0.4, ease: "power2.in" }, "<") // Hyperspace Zoom In
+                .queue(() => {
+                    // Swap core mesh geometry and colors instantly inside space
+                    mainObject.geometry.dispose();
+                    mainObject.geometry = geometries[type];
+                    mainObject.material.color.setHex(structureColor);
+                    light2.color.setHex(structureColor);
+                    starsMaterial.color.setHex(structureColor);
+                })
+                .to(camera.position, { z: 4, duration: 0.8, ease: "power2.out" }) // Zoom Out back
+                .to(mainObject.scale, { x: 1, y: 1, z: 1, duration: 1, ease: "elastic.out(1, 0.4)" }, "-=0.6");
         }
 
-        // Handle Responsive Resize
+        // Helper function for GSAP sequence queuing
+        gsap.registerEffect({
+            name: "queue",
+            effect: (targets, config) => { return gsap.to(targets, {onComplete: config.onComplete}); }
+        });
+        THREE.Curve.prototype.queue = function(callback) {
+            callback();
+            return this;
+        };
+
+        // Window Responsive Fit
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
