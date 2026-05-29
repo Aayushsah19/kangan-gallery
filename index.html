@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kangan Fancy Store | Pure HTML-to-3D Showroom</title>
+    <title>Kangan Fancy Store | Luxury Bangles 3D Showroom</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Three.js & GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <!-- HTML2Canvas: Isse hum real-time mein pure card ko 3D texture bana denge -->
+    <!-- HTML2Canvas: Captures exact bangle card into 3D texture -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <style>
@@ -23,21 +23,21 @@
         }
         .brand-title { font-family: 'Cinzel', serif; }
 
-        /* Fancy Interactive Cards */
-        .luxury-item-card {
+        /* Luxury Bangle Interactive Cards */
+        .luxury-bangle-card {
             background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.8);
             box-shadow: 0 10px 30px rgba(148, 163, 184, 0.08);
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .luxury-item-card:hover {
+        .luxury-bangle-card:hover {
             transform: translateY(-8px);
             border: 1px solid rgba(212, 175, 55, 0.6);
             box-shadow: 0 25px 50px rgba(212, 175, 55, 0.12);
         }
 
-        /* Fullscreen 3D Reality Theatre */
+        /* Fullscreen 3D Stage overlay */
         #theatre-3d-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 100;
@@ -51,40 +51,38 @@
         #theatre-3d-overlay.active { opacity: 1; pointer-events: auto; }
         #canvas-3d-holder { width: 500px; height: 600px; max-width: 95vw; max-height: 60vh; }
         
-        /* Loading animation during card morphing */
         #loader-status { display: none; }
         #loader-status.active { display: block; }
     </style>
 </head>
 <body class="text-slate-800">
 
-    <!-- 3D THEATRE STAGE -->
+    <!-- 3D REALITY EXPO STAGE -->
     <div id="theatre-3d-overlay">
-        <!-- Status Indicator -->
         <div id="loader-status" class="absolute text-sm font-bold tracking-widest text-amber-600 animate-pulse uppercase">
-            Transforming Card into 3D Mesh...
+            Projecting Bangle Card into 3D Space...
         </div>
 
         <div class="text-center mb-2 pointer-events-none z-10">
-            <h2 class="brand-title text-2xl md:text-3xl font-bold tracking-widest text-neutral-900">INTERACTIVE 3D VIEW</h2>
-            <p class="text-[9px] text-amber-600 font-bold mt-1 tracking-[0.4em] uppercase">Use Mouse/Touch to Flip and Rotate the actual card</p>
+            <h2 class="brand-title text-2xl md:text-3xl font-bold tracking-widest text-neutral-900">3D BANGLE PREVIEW</h2>
+            <p class="text-[9px] text-amber-600 font-bold mt-1 tracking-[0.4em] uppercase">Drag or Swipe to spin and inspect the exact card</p>
         </div>
 
-        <!-- This container holds the exact replicated 3D Object -->
+        <!-- The 3D holder where the card turns 3D -->
         <div id="canvas-3d-holder" class="cursor-grab active:cursor-grabbing"></div>
 
         <button onclick="closeTheatre3D()" class="mt-4 px-8 py-3 bg-neutral-900 hover:bg-amber-600 text-white text-[10px] tracking-[0.3em] font-bold uppercase rounded-full shadow-lg transition-all duration-300">
-            ← Back to Showroom
+            ← Back to Collection
         </button>
     </div>
 
-    <!-- MAIN INTERFACE -->
+    <!-- MAIN EXCLUSIVES SHOWROOM -->
     <div class="min-h-screen p-4 md:p-12 flex flex-col justify-between">
         
         <!-- Clean Luxury Header -->
-        <header class="w-full max-w-7xl mx-auto luxury-item-card rounded-[2rem] px-8 py-6 flex flex-col md:flex-row justify-between items-center">
+        <header class="w-full max-w-7xl mx-auto luxury-bangle-card rounded-[2rem] px-8 py-6 flex flex-col md:flex-row justify-between items-center">
             <div class="text-center md:text-left">
-                <span class="text-[9px] tracking-[0.6em] text-amber-600 font-bold uppercase block mb-1">Exclusive Digital Boutique</span>
+                <span class="text-[9px] tracking-[0.6em] text-amber-600 font-bold uppercase block mb-1">Premium Bangles Exclusive</span>
                 <h1 class="brand-title text-3xl md:text-4xl font-extrabold tracking-wide text-neutral-950">KANGAN FANCY STORE</h1>
                 <p class="text-[9px] tracking-[0.3em] text-slate-400 uppercase mt-1">Siraha, Nepal</p>
             </div>
@@ -92,75 +90,75 @@
             <div class="flex gap-2.5 mt-4 md:mt-0 text-[9px] font-bold tracking-widest uppercase">
                 <span class="px-4 py-2 rounded-full bg-white text-emerald-600 border border-slate-100 shadow-sm">eSewa</span>
                 <span class="px-4 py-2 rounded-full bg-white text-purple-600 border border-slate-100 shadow-sm">Khalti</span>
-                <span class="px-4 py-2 rounded-full bg-white text-amber-700 border border-slate-100 shadow-sm">COD Available</span>
+                <span class="px-4 py-2 rounded-full bg-white text-amber-700 border border-slate-100 shadow-sm">COD</span>
             </div>
         </header>
 
         <div class="text-center my-10">
-            <p class="text-[11px] font-bold tracking-[0.25em] text-slate-400 uppercase">
-                ✨ Click directly on any card to project that specific card into real 3D space ✨
+            <p class="text-[11px] font-bold tracking-[0.25em] text-amber-600 uppercase">
+                ✨ Tap any luxury bangle card to clone it into an interactive 3D object ✨
             </p>
         </div>
 
-        <!-- 20 Complete Retail Inventory Grid -->
+        <!-- 20 Complete Bangles-Only Inventory Grid -->
         <main class="w-full max-w-7xl mx-auto mb-12">
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6" id="showroom-grid">
-                <!-- Cards will be generated with clear IDs for perfect cloning -->
+                <!-- Exclusive Bangle Cards Auto-Generated Below -->
             </div>
         </main>
 
         <footer class="w-full text-center py-6 border-t border-slate-200/50 max-w-7xl mx-auto text-[9px] text-slate-400 tracking-[0.2em] uppercase">
-            &copy; 2026 Kangan Fancy Store • Premium Advanced Morph Engine.
+            &copy; 2026 Kangan Fancy Store • Siraha, Nepal. Crafted for Elite Bangle Connoisseurs.
         </footer>
     </div>
 
     <script>
-        // Full Inventory Dataset
-        const inventory = [
-            { id: "item-1", name: "Velvet Bangles", cat: "Jewelry", emoji: "💫", price: "1,200" },
-            { id: "item-2", name: "Bridal Chura", cat: "Jewelry", emoji: "👑", price: "4,500" },
-            { id: "item-3", name: "Gold Jhumkas", cat: "Jewelry", emoji: "✨", price: "2,400" },
-            { id: "item-4", name: "Matte Lipstick", cat: "Cosmetics", emoji: "💄", price: "850" },
-            { id: "item-5", name: "HD Foundation", cat: "Cosmetics", emoji: "🧪", price: "1,650" },
-            { id: "item-6", name: "Makeup Kit", cat: "Cosmetics", emoji: "💼", price: "8,500" },
-            { id: "item-7", name: "Henna Cones", cat: "Cosmetics", emoji: "🌿", price: "150" },
-            { id: "item-8", name: "Fancy Hair Clips", cat: "Accessories", emoji: "🎀", price: "350" },
-            { id: "item-9", name: "Gold Rani Haar", cat: "Jewelry", emoji: "📿", price: "12,500" },
-            { id: "item-10", name: "Bridal Payal", cat: "Jewelry", emoji: "🔔", price: "1,800" },
-            { id: "item-11", name: "Nail Polish Pack", cat: "Cosmetics", emoji: "💅", price: "950" },
-            { id: "item-12", name: "Eyeshadow Palette", cat: "Cosmetics", emoji: "👁️", price: "2,200" },
-            { id: "item-13", name: "Maang Tikka", cat: "Jewelry", emoji: "👑", price: "1,450" },
-            { id: "item-14", name: "Waterproof Kajal", cat: "Cosmetics", emoji: "✏️", price: "450" },
-            { id: "item-15", name: "Luxury Perfume", cat: "Cosmetics", emoji: "🔮", price: "3,800" },
-            { id: "item-16", name: "Fancy Kada Sets", cat: "Jewelry", emoji: "💫", price: "1,600" },
-            { id: "item-17", name: "Hair Brooch Juda", cat: "Accessories", emoji: "🔱", price: "750" },
-            { id: "item-18", name: "Skin Glow Serum", cat: "Cosmetics", emoji: "✨", price: "1,400" },
-            { id: "item-19", name: "Traditional Nath", cat: "Jewelry", emoji: "⭕", price: "1,100" },
-            { id: "item-20", name: "Premium Compact", cat: "Cosmetics", emoji: "🪞", price: "800" }
+        // Curated 20 Premium Bangle Variants Only
+        const bangleInventory = [
+            { id: "bangle-1", name: "Velvet Bangles", cat: "Matte Premium", emoji: "💫", price: "1,200" },
+            { id: "bangle-2", name: "Bridal Chura", cat: "Heavy Wedding", emoji: "👑", price: "4,500" },
+            { id: "bangle-3", name: "Fancy Kada Sets", cat: "Gold Plated", emoji: "🔱", price: "1,600" },
+            { id: "bangle-4", name: "Rajwadi Choora", cat: "Royal Antique", emoji: "✨", price: "5,200" },
+            { id: "bangle-5", name: "Glass Seesha Kangan", cat: "Traditional Cut", emoji: "🔮", price: "850" },
+            { id: "bangle-6", name: "Jaipuri Lac Kangans", cat: "Handcrafted Wax", emoji: "⚜️", price: "1,400" },
+            { id: "bangle-7", name: "Zircon Diamond Chura", cat: "Crystal Shine", emoji: "💎", price: "3,800" },
+            { id: "bangle-8", name: "Silk Thread Bangles", cat: "Custom Designer", emoji: "🎀", price: "950" },
+            { id: "bangle-9", name: "Meenakari Kada pair", cat: "Artistic Enamel", emoji: "🎨", price: "2,100" },
+            { id: "bangle-10", name: "Oxidized Silver Kada", cat: "Boho Tribal", emoji: "🪙", price: "700" },
+            { id: "bangle-11", name: "Polki Pearl Kangan", cat: "Bridal Heritage", emoji: "📿", price: "6,500" },
+            { id: "bangle-12", name: "Metal Party Bangles", cat: "Glossy Sounding", emoji: "⚡", price: "450" },
+            { id: "bangle-13", name: "Ghungroo Chura Set", cat: "Musical Tinkling", emoji: "🔔", price: "2,800" },
+            { id: "bangle-14", name: "Kundankari Bangles", cat: "Royal Gemstone", emoji: "🌟", price: "4,200" },
+            { id: "bangle-15", name: "Velvet Pearl Mix", cat: "Fusion Edition", emoji: "🌸", price: "1,850" },
+            { id: "bangle-16", name: "Daily Wear Kada", cat: "Lightweight Gold", emoji: "☀️", price: "1,100" },
+            { id: "bangle-17", name: "Stone Studded Kangan", cat: "Party Glamour", emoji: "💍", price: "2,400" },
+            { id: "bangle-18", name: "Traditional Lahathi", cat: "Mithila Special", emoji: "🔴", price: "1,350" },
+            { id: "bangle-19", name: "Matte Brass Kada", cat: "Vintage Look", emoji: "🪵", price: "900" },
+            { id: "bangle-20", name: "Plated Bracelet Chura", cat: "Modern Elegant", emoji: "💝", price: "1,950" }
         ];
 
-        // Injecting HTML Cards dynamically
+        // Injecting Clean Bangle HTML Cards Dynamically
         const grid = document.getElementById('showroom-grid');
-        inventory.forEach(product => {
+        bangleInventory.forEach(bangle => {
             grid.innerHTML += `
-                <div id="${product.id}" class="luxury-item-card rounded-[2rem] p-5 flex flex-col justify-between h-72 cursor-pointer" onclick="transformThisCardTo3D('${product.id}')">
-                    <div class="w-full h-36 bg-white/70 rounded-2xl flex items-center justify-center text-5xl shadow-inner border border-slate-100 mb-3">
-                        <span>${product.emoji}</span>
+                <div id="${bangle.id}" class="luxury-bangle-card rounded-[2rem] p-5 flex flex-col justify-between h-72 cursor-pointer" onclick="transformBangleTo3D('${bangle.id}')">
+                    <div class="w-full h-36 bg-gradient-to-b from-white/90 to-amber-50/20 rounded-2xl flex items-center justify-center text-5xl shadow-inner border border-slate-50 mb-3">
+                        <span>${bangle.emoji}</span>
                     </div>
                     <div>
-                        <span class="text-[9px] tracking-widest text-slate-400 font-bold uppercase">${product.cat}</span>
-                        <h4 class="font-bold text-sm text-slate-800 tracking-wide mt-0.5">${product.name}</h4>
+                        <span class="text-[9px] tracking-widest text-slate-400 font-bold uppercase">${bangle.cat}</span>
+                        <h4 class="font-bold text-sm text-slate-800 tracking-wide mt-0.5">${bangle.name}</h4>
                     </div>
                     <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100">
-                        <span class="text-xs font-bold text-slate-900">Rs. ${product.price}</span>
-                        <span class="text-[8px] text-amber-600 font-bold tracking-widest uppercase bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">Morph 3D</span>
+                        <span class="text-xs font-bold text-slate-900">Rs. ${bangle.price}</span>
+                        <span class="text-[8px] text-amber-600 font-bold tracking-widest uppercase bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">View 3D</span>
                     </div>
                 </div>
             `;
         });
 
-        // THREE.JS REAL-TIME TEXTURING MOTOR
-        let scene, camera, renderer, clonedCardMesh;
+        // THREE.JS HIGH PERFORMANCE TRANSITION
+        let scene, camera, renderer, activeBangleMesh;
         let isDragging = false;
         let prevMouse = { x: 0, y: 0 };
         const overlay = document.getElementById('theatre-3d-overlay');
@@ -177,50 +175,44 @@
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             holder.appendChild(renderer.domElement);
 
-            // Studio High Fidelity Lights
-            const ambient = new THREE.AmbientLight(0xffffff, 0.9);
+            const ambient = new THREE.AmbientLight(0xffffff, 0.95);
             scene.add(ambient);
             const light1 = new THREE.DirectionalLight(0xffffff, 0.8);
             light1.position.set(2, 4, 5);
             scene.add(light1);
         }
 
-        // CRAZY FEATURE: Converts the exact HTML element clicked into a 3D Texture live!
-        function transformThisCardTo3D(cardId) {
+        function transformBangleTo3D(bangleId) {
             overlay.classList.add('active');
             loader.classList.add('active');
 
             if (!scene) initTheatre();
-            if (clonedCardMesh) scene.remove(clonedCardMesh);
+            if (activeBangleMesh) scene.remove(activeBangleMesh);
 
-            const targetElement = document.getElementById(cardId);
+            const targetElement = document.getElementById(bangleId);
 
-            // Capture the exact layout, colors, text, and emojis of the clicked card
+            // Creates an exact high-fidelity image replica of the target clicked card
             html2canvas(targetElement, { backgroundColor: '#ffffff', scale: 2 }).then(canvas => {
                 loader.classList.remove('active');
 
                 const texture = new THREE.CanvasTexture(canvas);
                 
-                // Front Side: Exact Replica Image
+                // Front Side: Exact Bangle Card Content
                 const frontMat = new THREE.MeshStandardMaterial({ map: texture, roughness: 0.2, metalness: 0.1 });
-                // Back Side: Luxury Gold Metallic finish
+                // Back Side: Premium Luxury Gold Backplate
                 const backMat = new THREE.MeshStandardMaterial({ color: 0xD4AF37, metalness: 0.8, roughness: 0.2 });
-                // Side Edges
                 const sideMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
 
-                // Multi-material setup for realistic 3D board
                 const materials = [sideMat, sideMat, sideMat, sideMat, frontMat, backMat];
-
-                // Box geometry matches the card aspect ratio perfectly
                 const geometry = new THREE.BoxGeometry(2.2, 3.1, 0.08);
-                clonedCardMesh = new THREE.Mesh(geometry, materials);
                 
-                scene.add(clonedCardMesh);
+                activeBangleMesh = new THREE.Mesh(geometry, materials);
+                scene.add(activeBangleMesh);
 
-                // Luxury entry pop bounce
-                clonedCardMesh.scale.set(0, 0, 0);
-                clonedCardMesh.rotation.set(0.2, 0.5, 0);
-                gsap.to(clonedCardMesh.scale, { x: 1.2, y: 1.2, z: 1.2, duration: 0.8, ease: "back.out(1.5)" });
+                // Luxury Pop entry ease
+                activeBangleMesh.scale.set(0, 0, 0);
+                activeBangleMesh.rotation.set(0.1, 0.4, 0);
+                gsap.to(activeBangleMesh.scale, { x: 1.2, y: 1.2, z: 1.2, duration: 0.8, ease: "back.out(1.5)" });
             });
         }
 
@@ -228,42 +220,41 @@
             overlay.classList.remove('active');
         }
 
-        // Render Loop with floating effect
+        // Kinetic Render loops
         const clock = new THREE.Clock();
         function runEngine() {
             requestAnimationFrame(runEngine);
-            if (clonedCardMesh && !isDragging) {
+            if (activeBangleMesh && !isDragging) {
                 const elapsed = clock.getElapsedTime();
-                clonedCardMesh.rotation.y = Math.sin(elapsed * 0.5) * 0.4; // Auto premium wave sway
-                clonedCardMesh.position.y = Math.sin(elapsed * 1.5) * 0.1;
+                activeBangleMesh.rotation.y = Math.sin(elapsed * 0.5) * 0.4; // Soft premium floating wave
+                activeBangleMesh.position.y = Math.sin(elapsed * 1.5) * 0.1;
             }
             if (scene) renderer.render(scene, camera);
         }
         runEngine();
 
-        // Drag Controls
+        // Interaction Tracks
         holder.addEventListener('mousedown', () => isDragging = true);
         window.addEventListener('mouseup', () => isDragging = false);
         holder.addEventListener('mousemove', (e) => {
-            if (isDragging && clonedCardMesh) {
-                clonedCardMesh.rotation.y += (e.clientX - prevMouse.x) * 0.01;
-                clonedCardMesh.rotation.x += (e.clientY - prevMouse.y) * 0.01;
+            if (isDragging && activeBangleMesh) {
+                activeBangleMesh.rotation.y += (e.clientX - prevMouse.x) * 0.01;
+                activeBangleMesh.rotation.x += (e.clientY - prevMouse.y) * 0.01;
             }
             prevMouse = { x: e.clientX, y: e.clientY };
         });
 
-        // Mobile Touch Tracks
+        // Mobile Responsive Touch Tracks
         holder.addEventListener('touchstart', (e) => { isDragging = true; prevMouse = { x: e.touches[0].clientX, y: e.touches[0].clientY }; });
         window.addEventListener('touchend', () => isDragging = false);
         holder.addEventListener('touchmove', (e) => {
-            if (isDragging && clonedCardMesh) {
-                clonedCardMesh.rotation.y += (e.touches[0].clientX - prevMouse.x) * 0.01;
-                clonedCardMesh.rotation.x += (e.touches[0].clientY - prevMouse.y) * 0.01;
+            if (isDragging && activeBangleMesh) {
+                activeBangleMesh.rotation.y += (e.touches[0].clientX - prevMouse.x) * 0.01;
+                activeBangleMesh.rotation.x += (e.touches[0].clientY - prevMouse.y) * 0.01;
             }
             prevMouse = { x: e.touches[0].clientX, y: e.touches[0].clientY };
         });
 
-        // Auto Window Resize Fix
         window.addEventListener('resize', () => {
             if (camera && renderer) {
                 camera.aspect = holder.clientWidth / holder.clientHeight;
@@ -273,4 +264,4 @@
         });
     </script>
 </body>
-</html>
+</html>v
